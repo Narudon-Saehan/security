@@ -5,24 +5,26 @@ import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
 
 const RegisterScreen = () => {
-    const [userName, setUserName] = useState("")
-    const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
+    const [question, setQuestion] = useState("")
+    const [answer, setAnswer] = useState("")
     const [statusUserName, setStatusUserName] = useState(undefined)
     const [statusPassword, setStatusPassword] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();       
         setLoading(true)
         if (statusUserName && password && firstName && lastName) {
             axios.post("http://localhost:5000/register", {
-                userName: userName,
+                email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
-                email: email,
+                question:question,
+                answer:answer
             }).then((res) => {
                 console.log(res.data.token);
                 let link = "http://localhost:3000/RegisterSucceedScreen/" + res.data.token
@@ -51,10 +53,10 @@ const RegisterScreen = () => {
         }
     }
     const changeUserName = (value) => {
-        setUserName(value)
+        setEmail(value)
         if (value.length >= 6) {
             axios.post("http://localhost:5000/checkUserName", {
-                userName: value
+                email: value
             }).then((res) => {
                 console.log(res.data);
                 if (res.data.status === "ok") {
@@ -92,19 +94,25 @@ const RegisterScreen = () => {
             <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <label >UserName:</label>
-                <input type="text" value={userName} onChange={(e) => changeUserName(e.target.value)} />
-                <label>{(userName === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label><br /><br />
+                <input type="email" value={email} onChange={(e) => changeUserName(e.target.value)} />
+                <label>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label><br /><br />
 
                 <label >Password:</label>
                 <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} />
                 <label>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label><br /><br />
 
-                <label >Email:</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} /><br /><br />
                 <label >First name:</label>
                 <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} /><br /><br />
                 <label >Last name:</label>
                 <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} /><br /><br />
+
+                <label >เลือกคำถาม</label>
+                <select value={question} onChange={(e)=>setQuestion(e.target.value)} >
+                    <option value="คุณชอบสีอะไร">คุณชอบสีอะไร</option>
+                    <option value="คุณชอบอาหารอะไร">คุณชอบอาหารอะไร</option>
+                </select><br />
+                <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} />
+                <br /><br />
                 <input type="submit" value="Submit" />
             </form>
         </div>

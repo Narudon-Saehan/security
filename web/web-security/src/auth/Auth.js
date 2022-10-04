@@ -15,8 +15,8 @@ export const AuthProvider = ({children})=>{
         .then((res)=>{
             if(res.data.status==="ok"){
                 console.log(res.data);
-                const {userName,firstName,lastName } = res.data.decoded
-                setDataUser({userName:userName,firstName:firstName,lastName:lastName})
+                const {email,firstName,lastName,role } = res.data.decoded
+                setDataUser({email,firstName,lastName,role })
                 setLoading(false);
             }else{
                 localStorage.removeItem('tokenLoing');

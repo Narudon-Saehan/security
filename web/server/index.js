@@ -26,7 +26,7 @@ const db = mysql.createConnection({
 })
 
 app.get("/", (req, res) => {
-    db.query("SELECT * FROM users", (err, result) => {
+    db.query("SELECT * FROM allusers", (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -65,8 +65,8 @@ app.get("/", (req, res) => {
     transporter.close()
 })*/
 app.post("/checkUserName", (req, res) => {
-    const userName = req.body.userName
-    db.query("SELECT * FROM users WHERE userName=?", [userName], (err, result) => {
+    const email = req.body.email
+    db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
         if (err) {
             res.json({ status: 'error', message: err })
         } if (result.length === 0) {
@@ -78,73 +78,75 @@ app.post("/checkUserName", (req, res) => {
 })
 
 app.post("/register", (req, res) => {
-    const userName = req.body.userName
-    const plaintextPassword = req.body.password
     const email = req.body.email
+    const password = req.body.password
     const firstName = req.body.firstName
     const lastName = req.body.lastName
+    const question = req.body.question
+    const answer = req.body.answer
     //const token2 =jwt.sign({}, 'secret', {expiresIn: '2h'})
-    const token = jwt.sign({ userName: userName, password: plaintextPassword, email: email, firstName: firstName, lastName: lastName }, secret, { expiresIn: '2h' })
+    const token = jwt.sign({ email, password, firstName, lastName, question, answer }, secret, { expiresIn: '2h' })
     res.json({ status: 'ok', message: "login success", token: token })
 })
-
-app.post("/addUser", (req, res) => {
-    // const userName = req.body.userName
-    // const plaintextPassword = req.body.password
-    // const firstName = req.body.firstName
-    // const lastName = req.body.lastName
-    //console.log([userName, plaintextPassword, firstName, lastName]);
-    const token = req.body.token
+app.post("/checkRegister", (req, res) => {
     try {
+        const token = req.body.token
         const decoded = jwt.verify(token, secret);
-        const { userName, password, firstName, lastName } = decoded
-        console.log(decoded);
-        // db.query("SELECT * FROM users WHERE userName=?",
-        //     [userName], (err, result) => {
-        //         if (err) {
-        //             res.json({ status: 'error', message: err })
-        //             console.log(err);
-        //         }if (result.length === 0) {
-        //             res.json({ status: 'ok', message: "add user" })
-        //         }else{
-        //             res.json({ status: 'ok' , message: "user นี้มีในระบบแล้ว" })
-        //             //res.send(result);
-        //         }
-        //     }
-        // )
-        bcrypt.genSalt(saltRounds, (err, salt) => {
+        const { email } = decoded
+        db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
             if (err) {
                 res.json({ status: 'error', message: err })
-                return
+            } if (result.length === 0) {
+                res.json({ status: 'ok', decoded: decoded, message: "not found email" })
+            } else {
+                res.json({ status: 'ok', decoded: decoded, message: "found email" })
             }
-            bcrypt.hash(password, salt, (err, hashPassword) => {
-                if (err) {
-                    res.json({ status: 'error', message: err })
-                    return
-                }
-                //console.log(hashPassword);
-                db.query("INSERT INTO users (userName,password,firstName,lastName) VALUES(?,?,?,?)",
-                    [userName, hashPassword, firstName, lastName], (err, result) => {
-                        if (err) {
-                            res.json({ status: 'error', message: err })
-                            console.log(err);
-                        } else {
-                            res.json({ status: 'ok' })
-                            //res.send(result);
-                        }
-                    })
-            });
-        });
+        })
     } catch (err) {
         res.json({ status: "error", message: err.message })
     }
 })
 
+app.post("/addUser", (req, res) => {
+    const email = req.body.email
+    const password = req.body.password
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const question = req.body.question
+    const answer = req.body.answer
+    const password_time = new Date().toISOString()
+    
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+        if (err) {
+            res.json({ status: 'error', message: err })
+            return
+        }
+        bcrypt.hash(password, salt, (err, hashPassword) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            //console.log(hashPassword);
+            db.query("INSERT INTO users (email,password,firstName,lastName,question,answer,role,password_time) VALUES(?,?,?,?,?,?,?,?)",
+                [email, hashPassword, firstName, lastName, question, answer, "user", password_time], (err, result) => {
+                    if (err) {
+                        res.json({ status: 'error', message: err })
+                        console.log(err);
+                    } else {
+                        res.json({ status: 'ok' })
+                        //res.send(result);
+                    }
+                })
+        });
+    });
+
+})
+
 app.post("/loing", (req, res) => {
-    const userName = req.body.userName
+    const email = req.body.email
     const plaintextPassword = req.body.password
-    db.query("SELECT * FROM users WHERE userName=?",
-        [userName], (err, result) => {
+    db.query("SELECT * FROM users WHERE email=?",
+        [email], (err, result) => {
             if (err) {
                 res.json({ status: 'error', message: err })
             } else if (result.length === 0) {
@@ -152,7 +154,7 @@ app.post("/loing", (req, res) => {
             } else {
                 bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
                     if (isLoing) {
-                        const token = jwt.sign({ userName: userName, firstName: result[0].firstName, lastName: result[0].lastName }, secret, { expiresIn: '2h' })
+                        const token = jwt.sign({ email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role }, secret, { expiresIn: '2h' })
                         res.json({ status: 'ok', message: "login success", token: token })
                     } else {
                         res.json({ status: 'error', message: "login failed" })

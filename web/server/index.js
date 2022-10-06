@@ -26,7 +26,7 @@ const db = mysql.createConnection({
 })
 
 app.get("/", (req, res) => {
-    db.query("SELECT * FROM allusers", (err, result) => {
+    db.query("SELECT * FROM users", (err, result) => {
         if (err) {
             console.log(err);
         } else {
@@ -35,48 +35,20 @@ app.get("/", (req, res) => {
     })
 })
 
-/*app.get("/testNodemailer", (req, res) => {
-    const mailOptions = {
-        from: 'narudon.s@live.ku.th',
-        to: 'narudon.s@ku.th',
-        subject: 'Sending Email using Node.js',
-        text: 'That was easy!'
-    };
-    nodemailer.createTransport({
-        host: "smtp-mail.outlook.com", // hostname
-        secureConnection: false, // TLS requires secureConnection to be false
-        port: 587,
-        auth: {
-            user: 'narudon.s@live.ku.th',
-            pass: 'Nd-0620682282'
-        },
-        tls: {
-            ciphers:'SSLv3'
-        }
-    }).sendMail(mailOptions, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.send("error")
-        } else {
-            console.log(result);
-            res.send("OK");
-        }
-    })
-    transporter.close()
-})*/
+
+////////////////////////////////////Register//////////////////////////////////////////////
 app.post("/checkUserName", (req, res) => {
     const email = req.body.email
     db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
         if (err) {
             res.json({ status: 'error', message: err })
-        } if (result.length === 0) {
+        }else if (result.length === 0) {
             res.json({ status: 'ok', message: "not found username" })
         } else {
             res.json({ status: 'ok', message: "found username" })
         }
     })
 })
-
 app.post("/register", (req, res) => {
     const email = req.body.email
     const password = req.body.password
@@ -106,7 +78,6 @@ app.post("/checkRegister", (req, res) => {
         res.json({ status: "error", message: err.message })
     }
 })
-
 app.post("/addUser", (req, res) => {
     const email = req.body.email
     const password = req.body.password
@@ -139,10 +110,11 @@ app.post("/addUser", (req, res) => {
                 })
         });
     });
-
 })
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-app.post("/loing", (req, res) => {
+////////////////////////////////////Login//////////////////////////////////////////////
+app.post("/login", (req, res) => {
     const email = req.body.email
     const plaintextPassword = req.body.password
     db.query("SELECT * FROM users WHERE email=?",
@@ -163,8 +135,7 @@ app.post("/loing", (req, res) => {
             }
         })
 });
-
-///////ตรวจ token
+//////////////////////////////ตรวจ token///////////////////////////////
 app.post('/authen', (req, res) => {
     try {
         const token = req.body.token
@@ -174,14 +145,70 @@ app.post('/authen', (req, res) => {
         res.json({ status: "error", message: err.message })
     }
 })
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-app.post("/forgotPassword", (req, res) => {
-    const userName = req.body.userName
-    const token = jwt.sign({ userName: userName }, secret, { expiresIn: '15m' })
-    res.json({ status: 'ok', message: "login success", token: token })
+////////////////////////////Forgot Password/////////////////////////////////////////////////////////////////
+app.post("/forgotPassword/checkEmail", (req, res) => {
+    const email = req.body.email
+    db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
+        if (err) {
+            res.json({ status: 'error', message: err })
+        }else if (result.length === 0) {
+            res.json({ status: 'ok', message: "not found email"})
+        } else {
+            const token = jwt.sign({ id: result[0].id, question:result[0].question}, secret, { expiresIn: '15m' })
+            res.json({ status: 'ok', message: "found email", token: token  })
+        }
+    })
 })
+app.post("/forgotPassword/authen", (req, res) => {
+    try {
+        const token = req.body.token
+        const decoded = jwt.verify(token, secret);
+        res.json({ status: "ok", decoded })
+    } catch (err) {
+        res.json({ status: "error", message: err.message })
+    }
+})
+app.post("/forgotPassword/checkAnswer", (req, res) => {
+    const id = req.body.id
+    const answer = req.body.answer
+    db.query("SELECT * FROM users WHERE id=? AND answer=?", [id,answer], (err, result) => {
+        if (err) {
+            res.json({ status: 'error', message: err })
+        }else if (result.length === 0) {
+            res.json({ status: 'ok', message: "wrong"})
+        } else {
+            res.json({ status: 'ok', message: "correct"})
+        }
+    })
+})
+app.post("/forgotPassword/changePassword", (req, res) => {
+    const id = req.body.id
+    const password = req.body.password
+    bcrypt.genSalt(saltRounds, (err, salt) => {
+        if (err) {
+            res.json({ status: 'error', message: err })
+            return
+        }
+        bcrypt.hash(password, salt, (err, hashPassword) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                return
+            }
+            db.query("UPDATE users SET password=? WHERE id=? ",
+                [hashPassword,id], (err, result) => {
+                    if (err) {
+                        res.json({ status: 'error', message: err })
+                    } else {
+                        res.json({ status: 'ok' ,result})
+                        //res.send(result);
+                    }
+                })
+        });
+    });
+})
+//////////////////////////////////////////////////////////////////////////////////
 
 app.post("/resetPassword", (req, res) => {
     const userName = req.body.userName

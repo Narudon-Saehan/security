@@ -1,17 +1,16 @@
-import { useNavigate,Navigate } from "react-router-dom"
+import { useParams} from "react-router-dom"
 import React,{ useContext, useEffect } from "react"
 import { AuthContext } from "../auth/Auth"
 import axios from "axios"
 const ResetPasswordScreen =()=>{
     const {checkLogout,dataUser}= useContext(AuthContext)
+    const params = useParams()
+
 
     useEffect(() => {
-        axios.get("http://localhost:5000/register")
-        .then(()=>{
-            console.log("ok");
-        }).catch(()=>{
-            console.log("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
-        })
+        return ()=>{
+            console.log(params);
+        }
     },[]);
 
     return(

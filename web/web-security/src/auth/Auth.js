@@ -7,8 +7,8 @@ export const AuthProvider = ({children})=>{
     const [checkLogout,setcheckLogout] = useState(false)
     const [dataUser,setDataUser] = useState()
     const checkAuthentication = ()=>{
-        const token = localStorage.getItem("tokenLoing")
-        console.log('tokenLoing',token);
+        const token = localStorage.getItem("tokenLogin")
+        console.log('tokenLogin',token);
         axios.post("http://localhost:5000/authen",{
             token:token
         })
@@ -19,12 +19,12 @@ export const AuthProvider = ({children})=>{
                 setDataUser({email,firstName,lastName,role })
                 setLoading(false);
             }else{
-                localStorage.removeItem('tokenLoing');
+                localStorage.removeItem('tokenLogin');
                 setcheckLogout(true)
                 setLoading(false);
             }
         },(err)=>{
-            localStorage.removeItem('tokenLoing');
+            localStorage.removeItem('tokenLoging');
             setcheckLogout(true)
             setLoading(false);
         })

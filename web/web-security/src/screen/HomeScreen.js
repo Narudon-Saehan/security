@@ -5,11 +5,10 @@ const HomeScreen =()=>{
     const {checkLogout,dataUser}= useContext(AuthContext)
     const navigate = useNavigate()
     const logout=()=>{
-        localStorage.removeItem("tokenLoing")
+        localStorage.removeItem("tokenLogin")
         window.location="/"
         //navigate("/")
     }
-    console.log(dataUser);
     if(checkLogout){
         return <Navigate to ="/"/>
     }

@@ -101,7 +101,7 @@ const RegisterScreen = () => {
                         <div class="pass">
                             <label>Email : </label>
                             &ensp;&ensp;
-                            <label style={{ color: statusUserName ? "green" : "red" }}>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
+                            <label style={{ color: statusUserName ? "red" : "green" }}>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
                         </div>
                         <div class="fields">
                             <span class="fa fa-user"></span>
@@ -110,43 +110,50 @@ const RegisterScreen = () => {
                         <div class="pass">
                             <label>Password : </label>
                             &ensp;&ensp;
-                            <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                            <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                         </div>
-                        <div class="field">
+                        <div class="fields">
                             <span></span>
                             <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
                         </div>
                         <div class="pass">
                             <label>Confirm Password : </label>
                             &ensp;&ensp;
-                            <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                            <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                         </div>
-                        <div class="field">
+                        <div class="fields">
                             <span></span>
                             <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
                         </div>
-                        <div class="field space">
+                        <div class="pass">
+                            <label>First Name : </label>
+                            &ensp;&ensp;
+                        </div>
+                        <div class="fields space">
                             <span></span>
                             <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" /><br /><br />
-                            
+
                         </div>
-                        <div class="field space">
+                        <div class="pass">
+                            <label>Last Name : </label>
+                            &ensp;&ensp;
+                        </div>
+                        <div class="fields space">
                             <span></span>
                             <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" /><br /><br />
                         </div>
                         <div className="space">
                             <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} >
-                                <option value="">กรุณาเลือกคำถาม</option>
-                                <option value="คุณชอบสีอะไร">คุณชอบสีอะไร</option>
-                                <option value="คุณชอบอาหารอะไร">คุณชอบอาหารอะไร</option>
-                                <option value="สัตว์เลี้ยงตัวแรกของคุณชื่ออะไร">สัตว์เลี้ยงตัวแรกของคุณชื่ออะไร</option>
-                                <option value="คุณอยากไปท่องเที่ยวประเทศอะไรมากที่สุด">คุณอยากไปท่องเที่ยวประเทศอะไรมากที่สุด</option>
-                                <option value="เพื่อนคนแรกชื่ออะไร">เพื่อนคนแรกชื่ออะไร</option>
+                                <option value="">Please select a question</option>
+                                <option value="what's your favorite food">what's your favorite food</option>
+                                <option value="What was your first pet's name?">What was your first pet's name?</option>
+                                <option value="What country would you like to travel the most?">What country would you like to travel the most?</option>
+                                <option value="What's your first friend's name?">What's your first friend's name?</option>
                             </select>
                         </div>
-                        <div className="field space">
+                        <div className="fields space">
                             <span></span>
-                            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="คำตอบ" />
+                            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" />
                             <br /><br />
                         </div>
                         <div class="field space">

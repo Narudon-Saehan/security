@@ -5,6 +5,9 @@ import { AuthContext } from "../auth/Auth";
 import LoadingScreen from "./LoadingScreen";
 import './LoginScreen.css'
 import ReCAPTCHA from "react-google-recaptcha";
+import { FaUserCircle } from 'react-icons/fa';
+import { HiKey } from 'react-icons/hi';
+
 const LoginScreen =()=>{
     const {checkLogout} = useContext(AuthContext);
     const [email,setEmail] = useState("")
@@ -75,11 +78,11 @@ const LoginScreen =()=>{
                     <header>LOGIN</header>
                         <form onSubmit={handleSubmit}>
                             <div class="field">
-                                <span class="fa fa-user"></span>
+                                <span><FaUserCircle/></span>
                                 <input type="text" value={email} onChange={(e)=>setEmail(e.target.value)} required placeholder="Email"/>
                             </div>
                             <div class="field space">
-                                <span></span>
+                                <span><HiKey/></span>
                                 <input type="password" class="pass-key" value={password} onChange={(e)=>setPassword(e.target.value)} required placeholder="Password"/>
                                 {/* <span class="show">SHOW</span> */}
                             </div>

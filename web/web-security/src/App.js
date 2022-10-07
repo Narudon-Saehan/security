@@ -22,13 +22,13 @@ function App() {
         &ensp;&ensp;&ensp;
         <a href="/home">Home</a>
         &ensp;&ensp;&ensp;
-        <Link to="/resetPass/1">Reset Password</Link>
+        <Link to="/resetPass">Reset Password</Link>
         &ensp;&ensp;&ensp;
         <Link to="/forgotPass">Forgot Password</Link>
         &ensp;&ensp;&ensp;
-        <Link to="/RegisterSucceedScreen">RegisterSucceedScreen</Link>
+        <Link to="/RegisterSucceedScreen/1">RegisterSucceedScreen</Link>
         &ensp;&ensp;&ensp;
-        <Link to="/TestSendMail">TestSendMail</Link>
+        <Link to="/ForgotPassScreen/1">ForgotPasswordSucceedScreen</Link>
         &ensp;&ensp;&ensp;
         <Link to="/loading">loading</Link>
         &ensp;&ensp;&ensp;
@@ -39,7 +39,7 @@ function App() {
           <Route path='/home' element={<HomeScreen/>}/>
           <Route path='/forgotPass' element={<ForgotPasswordScreen/>}/>
           <Route path='/ForgotPassScreen/:token' element={<ForgotPasswordSucceedScreen/>}/>
-          <Route path='/resetPass/:token' element={<ResetPasswordScreen/>}/>
+          <Route path='/resetPass' element={<ResetPasswordScreen/>}/>
           <Route path='/RegisterSucceedScreen/:token' element={<RegisterSucceedScreen/>}/>
 
           <Route path='/TestSendMail' element={<TestSendMail/>}/>

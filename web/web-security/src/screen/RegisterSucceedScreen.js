@@ -2,23 +2,25 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "./LoadingScreen";
+import './LoginScreen.css';
 
 const RegisterSucceedScreen = () => {
     const { token } = useParams();
     const [dataUser, setDataUser] = useState();
     const [loading, setLoading] = useState(true);
     const [statusRegister, setStatusRegister] = useState(false);
+    const Swal = require('sweetalert2')
 
     const confirmRegister = () => {
         if (!statusRegister) {
             setLoading(true)
             axios.post("http://localhost:5000/addUser", {
-                email:dataUser.email,
-                password:dataUser.password,
-                firstName:dataUser.firstName,
-                lastName:dataUser.lastName,
-                question:dataUser.question,
-                answer:dataUser.answer
+                email: dataUser.email,
+                password: dataUser.password,
+                firstName: dataUser.firstName,
+                lastName: dataUser.lastName,
+                question: dataUser.question,
+                answer: dataUser.answer
             })
                 .then((res) => {
                     if (res.data.status === "error") {
@@ -32,6 +34,43 @@ const RegisterSucceedScreen = () => {
                 })
         }
     }
+    const confirmRegister1 = () => {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: 'btn btn-danger',
+              cancelButton: 'btn btn-success'
+            },
+            buttonsStyling: false
+          })
+
+          swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, confirm!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+          }).then((result) => {
+            if (result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'OK',
+                'NUTDANAI KAIROD',
+                'success'
+              )
+              confirmRegister();
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire(
+                'Cancelled',
+                'KUY 【8=DD】',
+                'error'
+              )
+            }
+          })
+    }
 
     useEffect(() => {
         return () => {
@@ -43,6 +82,7 @@ const RegisterSucceedScreen = () => {
                         console.log(res.data);
                         if (res.data.status === "error") {
                             alert(res.data.message)
+                            window.location = '/error'
                         } else {
                             if (res.data.message === "found email") {
                                 setStatusRegister(true)
@@ -62,18 +102,31 @@ const RegisterSucceedScreen = () => {
     }
     if (!statusRegister) {
         return (
-            <div style={{ display: "flex", flexDirection: 'column', height: "100vh", justifyContent: 'center', alignItems: "center", backgroundColor: 'red' }}>
-                <h1>กดปุ่มเพื่อยืนยันการสมัคร</h1>
-                <input type="submit" value="Submit" onClick={()=>confirmRegister()}/>
-            </div>
+            <body>
+                <div className="bg-img">
+                    <div className="content">
+                        <header>Confirm to Register</header>
+                        <div className="space">
+                            <button type="button" class="btn btn-primary btn-lg" value="Submit" onClick={() => confirmRegister1()}>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </body>
         )
     }
 
     return (
-        <div style={{ display: "flex", flexDirection: 'column', height: "100vh", justifyContent: 'center', alignItems: "center", backgroundColor: 'red' }}>
-            <h1>Register Succeed</h1>
-            <Link to="/"><input type="submit" value="go to Login" /></Link>
-        </div>
+        <body>
+            <div className="bg-img">
+                <div className="content">
+                    <header>Register</header>
+                    <Link to="/">
+                        <button type="button" class="btn btn-primary btn-lg" value="go to Login">go to Login</button>
+
+                    </Link>
+                </div>
+            </div>
+        </body>
     )
 }
 export default RegisterSucceedScreen;

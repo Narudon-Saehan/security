@@ -98,7 +98,7 @@ app.post("/addUser", (req, res) => {
                 return
             }
             //console.log(hashPassword);
-            db.query("INSERT INTO users (email,password,firstName,lastName,question,answer,role,password_time) VALUES(?,?,?,?,?,?,?,?)",
+            db.query("INSERT INTO users (email,password,firstName,lastName,question,answer,role,password_time) VALUES(?,?,?,?,?,?,?,CONVERT_TZ(?,'+00:00','+7:00'))",
                 [email, hashPassword, firstName, lastName, question, answer, "user", password_time], (err, result) => {
                     if (err) {
                         res.json({ status: 'error', message: err })
@@ -126,7 +126,7 @@ app.post("/login", (req, res) => {
             } else {
                 bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
                     if (isLoing) {
-                        const token = jwt.sign({ email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: result[0].password_time  }, secret, { expiresIn: '3h' })
+                        const token = jwt.sign({ id: result[0].id, email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: result[0].password_time  }, secret, { expiresIn: '3h' })
                         res.json({ status: 'ok', message: "login success", token: token })
                     } else {
                         res.json({ status: 'error', message: "login failed" })
@@ -209,18 +209,52 @@ app.post("/forgotPassword/changePassword", (req, res) => {
         });
     });
 })
-//////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////Reset Password//////////////////////////////////////////////////
 
 app.post("/resetPassword", (req, res) => {
-    const userName = req.body.userName
-    const token = req.body.token
-    const decoded = jwt.verify(token, secret);
-    if (userName === decoded) {
-        res.json({ status: 'ok', message: "login success", token: token })
-    }
+    const id = req.body.id
+    const plaintextPassword = req.body.password
+    const password_time = new Date().toISOString()
+    db.query("SELECT * FROM users WHERE id=?",
+    [id], (err, result) => {
+        if (err) {
+            res.json({ status: 'error', message: err })
+        } 
+        else {
+            bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
+                if (isLoing) {
+                    res.json({ status: 'duplicate', message: "Duplicate the same password"})
+                    return
+                } 
+                bcrypt.genSalt(saltRounds, (err, salt) => {
+                    if (err) {
+                        res.json({ status: 'error', message: err })
+                        return
+                    }
+                    bcrypt.hash(plaintextPassword, salt, (err, hashPassword) => {
+                        if (err) {
+                            res.json({ status: 'error', message: err })
+                            return
+                        }
+                        db.query("UPDATE users SET password=? , password_time=CONVERT_TZ(?,'+00:00','+7:00') WHERE id=? ",
+                        [hashPassword,password_time,id], (err, updateResult) => {
+                            if (err) {
+                                res.json({ status: 'error', message: err })
+                            } else {
+                                const token = jwt.sign({ id: result[0].id, email: result[0].email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: password_time  }, secret, { expiresIn: '3h' })
+                                res.json({ status: 'ok', message: "update success", token: token })
+                            }
+                        })
+                    })
+                })
+            })
+        }
+    })
 })
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 app.listen(5000, function () {

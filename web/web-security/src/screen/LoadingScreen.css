@@ -182,3 +182,12 @@ body .dribbble img {
   display: block;
   height: 28px;
 }
+
+.forgettext{
+  color:white;
+  font-family: Roboto, Arial;
+}
+
+.showbutton{
+  background-color: transparent;
+}

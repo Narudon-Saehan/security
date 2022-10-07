@@ -5,6 +5,7 @@ export const AuthContext= React.createContext();
 export const AuthProvider = ({children})=>{
     const [loading,setLoading] = useState(true);
     const [checkLogout,setcheckLogout] = useState(false)
+    const [statusPasswordTime,setStatusPasswordTime] = useState(false)
     const [dataUser,setDataUser] = useState()
     const checkAuthentication = ()=>{
         const token = localStorage.getItem("tokenLogin")
@@ -14,9 +15,14 @@ export const AuthProvider = ({children})=>{
         })
         .then((res)=>{
             if(res.data.status==="ok"){
-                console.log(res.data);
-                const {email,firstName,lastName,role,password_time} = res.data.decoded
-                setDataUser({email,firstName,lastName,role,password_time })
+                //console.log(res.data);
+                const {id,email,firstName,lastName,role,password_time} = res.data.decoded
+                let date = new Date(password_time)
+                let dateR = new Date()
+                let day = Math.floor((new Date() - new Date(password_time)) / (24 * 60 * 60 * 1000))
+                //console.log(date.toISOString()+" "+dateR.toISOString() +" = "+day);
+                setStatusPasswordTime(day<90)
+                setDataUser({id,email,firstName,lastName,role,password_time })
                 setLoading(false);
             }else{
                 localStorage.removeItem('tokenLogin');
@@ -38,7 +44,7 @@ export const AuthProvider = ({children})=>{
         return <LoadingScreen/>;
     }
     return (
-        <AuthContext.Provider value={{checkLogout,dataUser}}>
+        <AuthContext.Provider value={{checkLogout,dataUser,statusPasswordTime}}>
             {children}
         </AuthContext.Provider>
     )

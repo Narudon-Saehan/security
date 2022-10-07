@@ -126,7 +126,7 @@ app.post("/login", (req, res) => {
             } else {
                 bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
                     if (isLoing) {
-                        const token = jwt.sign({ email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role }, secret, { expiresIn: '2h' })
+                        const token = jwt.sign({ email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: result[0].password_time  }, secret, { expiresIn: '3h' })
                         res.json({ status: 'ok', message: "login success", token: token })
                     } else {
                         res.json({ status: 'error', message: "login failed" })
@@ -186,6 +186,7 @@ app.post("/forgotPassword/checkAnswer", (req, res) => {
 app.post("/forgotPassword/changePassword", (req, res) => {
     const id = req.body.id
     const password = req.body.password
+    const password_time = new Date().toISOString()
     bcrypt.genSalt(saltRounds, (err, salt) => {
         if (err) {
             res.json({ status: 'error', message: err })
@@ -196,8 +197,8 @@ app.post("/forgotPassword/changePassword", (req, res) => {
                 res.json({ status: 'error', message: err })
                 return
             }
-            db.query("UPDATE users SET password=? WHERE id=? ",
-                [hashPassword,id], (err, result) => {
+            db.query("UPDATE users SET password=? , password_time=CONVERT_TZ(?,'+00:00','+7:00') WHERE id=? ",
+                [hashPassword,password_time,id], (err, result) => {
                     if (err) {
                         res.json({ status: 'error', message: err })
                     } else {

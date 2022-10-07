@@ -20,7 +20,7 @@ function App() {
         &ensp;&ensp;&ensp;
         <Link to="/register">Register</Link>
         &ensp;&ensp;&ensp;
-        <Link to="/home">Home</Link>
+        <a href="/home">Home</a>
         &ensp;&ensp;&ensp;
         <Link to="/resetPass/1">Reset Password</Link>
         &ensp;&ensp;&ensp;

@@ -63,13 +63,19 @@ const ForgotPasswordSucceedScreen =()=>{
     const ChangePassword =()=>{
         setLoading(true)
         axios.post("http://localhost:5000/forgotPassword/changePassword",{
-            id:3,
+            id:dataFormToken.id,
             password:password
         })
         .then((res)=>{
             if(res.data.status === "ok"){
-                console.log(res.data);
-                setLoading(false)
+                console.log(res.data.result.affectedRows);
+                if(res.data.result.affectedRows === 1){
+                    alert("แก้ไขสำเร็จ")
+                    window.location = '/'
+                }else{
+                    alert("แก้ไขล้มเหลว")
+                    setLoading(false)
+                }
             }else{
                 setLoading(false)
             }

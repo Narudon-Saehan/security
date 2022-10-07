@@ -3,7 +3,8 @@ import axios from "axios";
 import emailjs from '@emailjs/browser';
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
-import './RegisterScreen.css';
+import './LoginScreen.css';
+import './RegisterScreen.css'
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState("")
@@ -16,16 +17,16 @@ const RegisterScreen = () => {
     const [statusPassword, setStatusPassword] = useState(undefined)
     const [loading, setLoading] = useState(false)
     const handleSubmit = (e) => {
-        e.preventDefault();       
+        e.preventDefault();
         setLoading(true)
-        if (statusUserName && password && firstName && lastName) {
+        if (statusUserName && password && firstName && lastName && question && answer) {
             axios.post("http://localhost:5000/register", {
                 email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
-                question:question,
-                answer:answer
+                question: question,
+                answer: answer
             }).then((res) => {
                 console.log(res.data.token);
                 let link = "http://localhost:3000/RegisterSucceedScreen/" + res.data.token
@@ -40,6 +41,7 @@ const RegisterScreen = () => {
                         console.log(result.text);
                         alert("ส่งข้อมูลไปที่เมลแล้ว")
                         setLoading(false)
+                        window.location = '/'
                     }, (error) => {
                         alert(error.text);
                         setLoading(false)
@@ -91,37 +93,69 @@ const RegisterScreen = () => {
         return <LoadingScreen />
     }
     return (
-        <body >
-        <div className="boxlogin" >
-            <div className="user-login-box-re" >
-                <div className="h1-register">Register</div>
+        <body>
+            <div className="bg-img">
+                <div className="content">
+                    <header>Register</header>
                     <form onSubmit={handleSubmit}>
-                        <label >Email:</label>
-                        <input type="email"  value={email} onChange={(e) => changeUserName(e.target.value)} />
-                        <label>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label><br /><br />
+                        <div class="pass">
+                            <label>Email : </label>
+                            &ensp;&ensp;
+                            <label style={{ color: statusUserName ? "green" : "red" }}>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
+                        </div>
+                        <div class="fields">
+                            <span class="fa fa-user"></span>
+                            <input type="email" value={email} onChange={(e) => changeUserName(e.target.value)} placeholder="Email" required />
+                        </div>
+                        <div class="pass">
+                            <label>Password : </label>
+                            &ensp;&ensp;
+                            <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                        </div>
+                        <div class="field">
+                            <span></span>
+                            <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
+                        </div>
+                        <div class="pass">
+                            <label>Confirm Password : </label>
+                            &ensp;&ensp;
+                            <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                        </div>
+                        <div class="field">
+                            <span></span>
+                            <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
+                        </div>
+                        <div class="field space">
+                            <span></span>
+                            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" /><br /><br />
+                            
+                        </div>
+                        <div class="field space">
+                            <span></span>
+                            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" /><br /><br />
+                        </div>
+                        <div className="space">
+                            <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} >
+                                <option value="">กรุณาเลือกคำถาม</option>
+                                <option value="คุณชอบสีอะไร">คุณชอบสีอะไร</option>
+                                <option value="คุณชอบอาหารอะไร">คุณชอบอาหารอะไร</option>
+                                <option value="สัตว์เลี้ยงตัวแรกของคุณชื่ออะไร">สัตว์เลี้ยงตัวแรกของคุณชื่ออะไร</option>
+                                <option value="คุณอยากไปท่องเที่ยวประเทศอะไรมากที่สุด">คุณอยากไปท่องเที่ยวประเทศอะไรมากที่สุด</option>
+                                <option value="เพื่อนคนแรกชื่ออะไร">เพื่อนคนแรกชื่ออะไร</option>
+                            </select>
+                        </div>
+                        <div className="field space">
+                            <span></span>
+                            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="คำตอบ" />
+                            <br /><br />
+                        </div>
+                        <div class="field space">
+                            <input type="submit" value="Register" />
+                        </div>
 
-                        <label >Password:</label>
-                        <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} />
-                        <label>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label><br /><br />
-
-                        <label >First name:</label>
-                        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} /><br /><br />
-                        <label >Last name:</label>
-                        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} /><br /><br />
-
-                        <label >เลือกคำถาม</label>
-                        <select value={question} onChange={(e)=>setQuestion(e.target.value)} >
-                            <option value="คุณชอบสีอะไร">คุณชอบสีอะไร</option>
-                            <option value="คุณชอบอาหารอะไร">คุณชอบอาหารอะไร</option>
-                        </select><br />
-                        <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} />
-                        <br /><br />
-                        <button className="btn btn-primary btn-block" type="submit" value="Submit">Submit</button>
-                        
                     </form>
+                </div>
             </div>
- 
-        </div>
         </body>
     )
 }

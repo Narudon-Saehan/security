@@ -5,13 +5,13 @@
   box-sizing: border-box;
   user-select: none;
 }
-.bg-img{
+body{
   background: url('https://img.freepik.com/premium-photo/hacker-silhouette-dark-green-binary-background-hacker-silhouette-binary-codes-toned-picture-silhouette-hacker-hoodie-hacking-malware-concept_256259-2363.jpg?w=2000');
   height: 100vh;
   background-size: cover;
   background-position: center;
 }
-.bg-img:after{
+.body:after{
   /*position: absolute;*/
   content: '';
   top: 0;
@@ -89,6 +89,11 @@
 .pass:hover a{
   text-decoration: underline;
 }
+.pass label{
+  color: white;
+  text-decoration: none;
+  font-family: 'Poppins',sans-serif;
+}
 .field input[type="submit"]{
   background: #3498db;
   border: 1px solid #2691d9;
@@ -102,6 +107,7 @@
 .field input[type="submit"]:hover{
   background: #2691d9;
 }
+
 .login{
   color: white;
   margin: 20px 0;

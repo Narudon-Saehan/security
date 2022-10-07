@@ -1,4 +1,3 @@
-
 .boxlogin {
     width: 40%;
     height: 500px;
@@ -9,29 +8,27 @@
     left: 33%;
     margin-top: -50px;
     margin-left: -50px;
-    
-  }
 
-.h1-register{
+}
+
+.h1-register {
     font-size: 30px;
     text-align: center;
     z-index: 1;
     font-weight: bold;
     margin: 10px;
 }
-.user-login-box-re {
-    position: absolute;
-    top: 1.5%;
-    left: 14%;
-    margin-top: 30px;
-    text-align: center;
-    z-index: 1;
-    border-style: double;
-    width: 70%;
-    height: 430px;
-    background-color: rgb(243, 235, 120);
-    
-}
+.fields{
+    position: relative;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    background: rgba(255,255,255,0.94);
+  }
+
+
+
+
 
 
 

@@ -8,6 +8,7 @@ import ForgotPasswordScreen from './screen/ForgotPasswordScreen';
 import ForgotPasswordSucceedScreen from './screen/ForgotPasswordSucceedScreen';
 import TestSendMail from './screen/TestSendMail';
 import RegisterSucceedScreen from './screen/RegisterSucceedScreen';
+import LogScreen from './screen/LogScreen';
 
 import LoadingScreen from './screen/LoadingScreen';
 import ErrorScreen from './screen/ErrorScreen';
@@ -30,6 +31,8 @@ function App() {
         &ensp;&ensp;&ensp;
         <Link to="/ForgotPassScreen/1">ForgotPasswordSucceedScreen</Link>
         &ensp;&ensp;&ensp;
+        <Link to="/Log">Log</Link>
+        &ensp;&ensp;&ensp;
         <Link to="/loading">loading</Link>
         &ensp;&ensp;&ensp;
         <Link to="/error">error</Link>
@@ -41,10 +44,12 @@ function App() {
           <Route path='/ForgotPassScreen/:token' element={<ForgotPasswordSucceedScreen/>}/>
           <Route path='/resetPass' element={<ResetPasswordScreen/>}/>
           <Route path='/RegisterSucceedScreen/:token' element={<RegisterSucceedScreen/>}/>
+          <Route path='/Log' element={<LogScreen/>}/>
 
           <Route path='/TestSendMail' element={<TestSendMail/>}/>
           <Route path='/loading' element={<LoadingScreen/>}/>
           <Route path='/error' element={<ErrorScreen/>}/>
+          <Route path='*' element={<ErrorScreen/>}/>
         </Routes>
       </BrowserRouter>
     </AuthProvider>

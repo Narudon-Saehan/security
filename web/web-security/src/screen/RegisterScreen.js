@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import axios from "axios";
 import emailjs from '@emailjs/browser';
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
+import { AuthContext } from "../auth/Auth"
 import './LoginScreen.css';
 import './RegisterScreen.css'
 
 const RegisterScreen = () => {
+    const { checkLogout } = useContext(AuthContext)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [repeatPassword, setRepeatPassword] = useState("")
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [question, setQuestion] = useState("")
@@ -89,6 +92,9 @@ const RegisterScreen = () => {
             setStatusPassword(false)
         }
     }
+    if(!checkLogout){
+        return window.location = '/home'
+    }
     if (loading) {
         return <LoadingScreen />
     }
@@ -98,69 +104,91 @@ const RegisterScreen = () => {
                 <div className="content">
                     <header>Register</header>
                     <form onSubmit={handleSubmit}>
-                        <div class="pass">
-                            <label>Email : </label>
+                        <div class="pass de">
+                            <label for="email" class="form-label">Email:</label>
                             &ensp;&ensp;
                             <label style={{ color: statusUserName ? "red" : "green" }}>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
                         </div>
-                        <div class="fields">
+                        <div class="fields ">
                             <span class="fa fa-user"></span>
                             <input type="email" value={email} onChange={(e) => changeUserName(e.target.value)} placeholder="Email" required />
                         </div>
-                        <div class="pass">
-                            <label>Password : </label>
-                            &ensp;&ensp;
-                            <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
-                        </div>
-                        <div class="fields">
-                            <span></span>
-                            <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
-                        </div>
-                        <div class="pass">
-                            <label>Confirm Password : </label>
-                            &ensp;&ensp;
-                            <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
-                        </div>
-                        <div class="fields">
-                            <span></span>
-                            <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" />
-                        </div>
-                        <div class="pass">
-                            <label>First Name : </label>
-                            &ensp;&ensp;
-                        </div>
-                        <div class="fields space">
-                            <span></span>
-                            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" /><br /><br />
-
-                        </div>
-                        <div class="pass">
-                            <label>Last Name : </label>
-                            &ensp;&ensp;
-                        </div>
-                        <div class="fields space">
-                            <span></span>
-                            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" /><br /><br />
+                        <div className="space">
+                            <div class="pass de ">
+                                <label>Password : </label>
+                                &ensp;&ensp;
+                                <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                            </div>
+                            <div class="fields">
+                                <span></span>
+                                <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required />
+                            </div>
                         </div>
                         <div className="space">
-                            <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} >
-                                <option value="">Please select a question</option>
-                                <option value="what's your favorite food">what's your favorite food</option>
-                                <option value="What was your first pet's name?">What was your first pet's name?</option>
-                                <option value="What country would you like to travel the most?">What country would you like to travel the most?</option>
-                                <option value="What's your first friend's name?">What's your first friend's name?</option>
-                            </select>
+                            <div class="pass de">
+                                <label>Confirm Password : </label>
+                                &ensp;&ensp;
+                                <label style={{ color: statusPassword ? "red" : "green" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                            </div>
+                            <div class="fields">
+                                <span></span>
+                                <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} placeholder="Password" required />
+                            </div>
                         </div>
-                        <div className="fields space">
+                        <div className="space">
+                            <div class="pass de">
+                                <label>First Name : </label>
+                                &ensp;&ensp;
+                            </div>
+                            <div class="fields ">
+                                <span></span>
+                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" /><br /><br />
+
+                            </div>
+                        </div>
+                        <div className="space">
+                            <div class="pass de">
+                                <label>Last Name : </label>
+                                &ensp;&ensp;
+                            </div>
+                            <div class="fields">
+                                <span></span>
+                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" /><br /><br />
+                            </div>
+                        </div>
+                        <div className="space">
+                            <div class="pass de">
+                                <label>Question : </label>
+                                &ensp;&ensp;
+                            </div>
+                            <div style={{}}>
+                                <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} style={{ height: "2.9em" }}>
+                                    <option value="">Please select a question</option>
+                                    <option value="what's your favorite food">what's your favorite food</option>
+                                    <option value="What was your first pet's name?">What was your first pet's name?</option>
+                                    <option value="What country would you like to travel the most?">What country would you like to travel the most?</option>
+                                    <option value="What's your first friend's name?">What's your first friend's name?</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="pass de">
+                            <label>Answer : </label>
+                            &ensp;&ensp;
+                        </div>
+                        <div className="fields">
                             <span></span>
                             <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" />
                             <br /><br />
                         </div>
-                        <div class="field space">
-                            <input type="submit" value="Register" />
+                        <div class="space">
+                            <button type="button" class="btn btn-primary btn-lg" value="Submit">Submit</button>
                         </div>
 
+
                     </form>
+                    <div class="space">
+                        <button type="button" onClick={() => window.location = '/'} class="btn btn-danger btn-lg" value="go to Login">Cancle</button>
+                    </div>
                 </div>
             </div>
         </body>

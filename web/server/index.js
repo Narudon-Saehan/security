@@ -42,7 +42,7 @@ app.post("/checkUserName", (req, res) => {
     db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
         if (err) {
             res.json({ status: 'error', message: err })
-        }else if (result.length === 0) {
+        } else if (result.length === 0) {
             res.json({ status: 'ok', message: "not found username" })
         } else {
             res.json({ status: 'ok', message: "found username" })
@@ -86,7 +86,7 @@ app.post("/addUser", (req, res) => {
     const question = req.body.question
     const answer = req.body.answer
     const password_time = new Date().toISOString()
-    
+
     bcrypt.genSalt(saltRounds, (err, salt) => {
         if (err) {
             res.json({ status: 'error', message: err })
@@ -117,19 +117,61 @@ app.post("/addUser", (req, res) => {
 app.post("/login", (req, res) => {
     const email = req.body.email
     const plaintextPassword = req.body.password
+
+    const log_date = new Date().toISOString()
+    const log_time = new Date().toISOString()
+    const ipv4 = req.body.ipv4
+    const country = req.body.country
+    const latitude = req.body.latitude
+    const longitude = req.body.longitude
+    const log_email = req.body.log_email
+    let status_email = false
+    let status_login = false
+
     db.query("SELECT * FROM users WHERE email=?",
         [email], (err, result) => {
             if (err) {
                 res.json({ status: 'error', message: err })
             } else if (result.length === 0) {
-                res.json({ status: 'error', message: "no user found" })
+                db.query("INSERT INTO log (log_date,log_time,ipv4,country,latitude,longitude,log_email,status_email,status_login) VALUES(CONVERT_TZ(?,'+00:00','+7:00'),CONVERT_TZ(?,'+00:00','+7:00'),?,?,?,?,?,?,?)",
+                    [log_date,log_time, ipv4, country, latitude, longitude, log_email,status_email,status_login], (err, result) => {
+                        if (err) {
+                            res.json({ status: 'error', message: err })
+                            //console.log(err);
+                        } else {
+                            res.json({ status: 'error', message: "no email found" })
+                        }
+                    })
+                //res.json({ status: 'error', message: "no email found" })
             } else {
+                status_email=true
                 bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
                     if (isLoing) {
-                        const token = jwt.sign({ id: result[0].id, email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: result[0].password_time  }, secret, { expiresIn: '3h' })
-                        res.json({ status: 'ok', message: "login success", token: token })
+                        status_login=true
+                        const token = jwt.sign({ id: result[0].id, email: email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: result[0].password_time }, secret, { expiresIn: '6h' })
+                        db.query("INSERT INTO log (log_date,log_time,ipv4,country,latitude,longitude,log_email,status_email,status_login) VALUES(CONVERT_TZ(?,'+00:00','+7:00'),CONVERT_TZ(?,'+00:00','+7:00'),?,?,?,?,?,?,?)",
+                            [log_date,log_time, ipv4, country, latitude, longitude, log_email,status_email,status_login], (err, result) => {
+                                if (err) {
+                                    res.json({ status: 'error', message: err })
+                                    //console.log(err);
+                                } else {
+                                    res.json({ status: 'ok', message: "login success", token: token })
+                                    //res.send(result);
+                                }
+                            })
+                        //res.json({ status: 'ok', message: "login success", token: token })
                     } else {
-                        res.json({ status: 'error', message: "login failed" })
+                        db.query("INSERT INTO log (log_date,log_time,ipv4,country,latitude,longitude,log_email,status_email,status_login) VALUES(CONVERT_TZ(?,'+00:00','+7:00'),CONVERT_TZ(?,'+00:00','+7:00'),?,?,?,?,?,?,?)",
+                            [log_date,log_time, ipv4, country, latitude, longitude, log_email,status_email,status_login], (err, result) => {
+                                if (err) {
+                                    res.json({ status: 'error', message: err })
+                                    //console.log(err);
+                                } else {
+                                    res.json({ status: 'error', message: "login failed" })
+                                    //res.send(result);
+                                }
+                            })
+                        //res.json({ status: 'error', message: "login failed" })
                     }
                 })
             }
@@ -153,11 +195,11 @@ app.post("/forgotPassword/checkEmail", (req, res) => {
     db.query("SELECT * FROM users WHERE email=?", [email], (err, result) => {
         if (err) {
             res.json({ status: 'error', message: err })
-        }else if (result.length === 0) {
-            res.json({ status: 'ok', message: "not found email"})
+        } else if (result.length === 0) {
+            res.json({ status: 'ok', message: "not found email" })
         } else {
-            const token = jwt.sign({ id: result[0].id, question:result[0].question}, secret, { expiresIn: '15m' })
-            res.json({ status: 'ok', message: "found email", token: token  })
+            const token = jwt.sign({ id: result[0].id, question: result[0].question }, secret, { expiresIn: '15m' })
+            res.json({ status: 'ok', message: "found email", token: token })
         }
     })
 })
@@ -173,13 +215,13 @@ app.post("/forgotPassword/authen", (req, res) => {
 app.post("/forgotPassword/checkAnswer", (req, res) => {
     const id = req.body.id
     const answer = req.body.answer
-    db.query("SELECT * FROM users WHERE id=? AND answer=?", [id,answer], (err, result) => {
+    db.query("SELECT * FROM users WHERE id=? AND answer=?", [id, answer], (err, result) => {
         if (err) {
             res.json({ status: 'error', message: err })
-        }else if (result.length === 0) {
-            res.json({ status: 'ok', message: "wrong"})
+        } else if (result.length === 0) {
+            res.json({ status: 'ok', message: "wrong" })
         } else {
-            res.json({ status: 'ok', message: "correct"})
+            res.json({ status: 'ok', message: "correct" })
         }
     })
 })
@@ -198,11 +240,11 @@ app.post("/forgotPassword/changePassword", (req, res) => {
                 return
             }
             db.query("UPDATE users SET password=? , password_time=CONVERT_TZ(?,'+00:00','+7:00') WHERE id=? ",
-                [hashPassword,password_time,id], (err, result) => {
+                [hashPassword, password_time, id], (err, result) => {
                     if (err) {
                         res.json({ status: 'error', message: err })
                     } else {
-                        res.json({ status: 'ok' ,result})
+                        res.json({ status: 'ok', result })
                         //res.send(result);
                     }
                 })
@@ -218,43 +260,118 @@ app.post("/resetPassword", (req, res) => {
     const plaintextPassword = req.body.password
     const password_time = new Date().toISOString()
     db.query("SELECT * FROM users WHERE id=?",
-    [id], (err, result) => {
-        if (err) {
-            res.json({ status: 'error', message: err })
-        } 
-        else {
-            bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
-                if (isLoing) {
-                    res.json({ status: 'duplicate', message: "Duplicate the same password"})
-                    return
-                } 
-                bcrypt.genSalt(saltRounds, (err, salt) => {
-                    if (err) {
-                        res.json({ status: 'error', message: err })
+        [id], (err, result) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+            }
+            else {
+                bcrypt.compare(plaintextPassword, result[0].password, (err, isLoing) => {
+                    if (isLoing) {
+                        res.json({ status: 'duplicate', message: "Duplicate the same password" })
                         return
                     }
-                    bcrypt.hash(plaintextPassword, salt, (err, hashPassword) => {
+                    bcrypt.genSalt(saltRounds, (err, salt) => {
                         if (err) {
                             res.json({ status: 'error', message: err })
                             return
                         }
-                        db.query("UPDATE users SET password=? , password_time=CONVERT_TZ(?,'+00:00','+7:00') WHERE id=? ",
-                        [hashPassword,password_time,id], (err, updateResult) => {
+                        bcrypt.hash(plaintextPassword, salt, (err, hashPassword) => {
                             if (err) {
                                 res.json({ status: 'error', message: err })
-                            } else {
-                                const token = jwt.sign({ id: result[0].id, email: result[0].email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: password_time  }, secret, { expiresIn: '3h' })
-                                res.json({ status: 'ok', message: "update success", token: token })
+                                return
                             }
+                            db.query("UPDATE users SET password=? , password_time=CONVERT_TZ(?,'+00:00','+7:00') WHERE id=? ",
+                                [hashPassword, password_time, id], (err, updateResult) => {
+                                    if (err) {
+                                        res.json({ status: 'error', message: err })
+                                    } else {
+                                        const token = jwt.sign({ id: result[0].id, email: result[0].email, firstName: result[0].firstName, lastName: result[0].lastName, role: result[0].role, password_time: password_time }, secret, { expiresIn: '3h' })
+                                        res.json({ status: 'ok', message: "update success", token: token })
+                                    }
+                                })
                         })
                     })
                 })
-            })
-        }
-    })
+            }
+        })
 })
 
-////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////LOG////////////////////////////////////////////////////
+app.post('/addLog', (req, res) => {
+    const log_datetime = new Date().toISOString()
+    const ipv4 = req.body.ipv4
+    const country = req.body.country
+    const latitude = req.body.latitude
+    const longitude = req.body.longitude
+    const log_email = req.body.log_email
+    const status_email = req.body.status_email
+    const status_login = req.body.status_login
+    db.query("INSERT INTO log (log_datetime,ipv4,country,latitude,longitude,log_email,status_email,status_login) VALUES(CONVERT_TZ(?,'+00:00','+7:00'),?,?,?,?,?,?,?)",
+        [log_datetime, ipv4, country, latitude, longitude, log_email,status_email,status_login], (err, result) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                console.log(err);
+            } else {
+                res.json({ status: 'ok' })
+                //res.send(result);
+            }
+        })
+})
+
+app.post('/testAddLog', (req, res) => {
+    const date = new Date().toISOString().split("T")[0]
+    const data_log = req.body.data_log
+    db.query("SELECT * FROM test WHERE date=?",
+        [date], (err, resultLog) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                console.log(err);
+            } else {
+                if(resultLog.length===0){
+                    db.query("INSERT INTO test (date,data_log) VALUES(?,?)",
+                    [date, "["+data_log+"]"], (err, result) => {
+                        if (err) {
+                            res.json({ status: 'error', message: err })
+                        } else {
+                            res.json({ status: 'ok',result:JSON.parse("["+data_log+"]") })
+                        }
+                    })
+                    console.log("not found");
+                }else{
+                    let dataLogTemp = JSON.parse(resultLog[0].data_log)
+                    let data_logTemp = JSON.parse(data_log)
+                    dataLogTemp.push(data_logTemp)
+                    let strDataLogTemp = JSON.stringify(dataLogTemp)
+                    db.query("UPDATE test SET data_log=? WHERE log_id=? ",
+                    [strDataLogTemp, resultLog[0].log_id], (err, result) => {
+                        if (err) {
+                            res.json({ status: 'error', message: err })
+                            //console.log(err);
+                        } else {
+                            res.json({ status: 'ok',result:JSON.parse(strDataLogTemp) })
+                        }
+                    })
+                    console.log("found");
+                }
+            }
+        })
+})
+
+app.post('/getLog', (req, res) => {
+    const log_date = req.body.log_date
+    db.query("SELECT * FROM log WHERE log_date=SUBSTRING(CONVERT_TZ(?,'+00:00','+7:00'),1,10)",
+        [log_date], (err, result) => {
+            if (err) {
+                res.json({ status: 'error', message: err })
+                console.log(err);
+            } else {
+                res.json({ status: 'ok',result })
+                //res.send(result);
+            }
+        })
+})
+///////////////////////////////////////////////LOG/////////////////////////////////////////////////
+
 
 
 app.listen(5000, function () {

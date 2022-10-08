@@ -11,6 +11,12 @@ body{
   background-size: cover;
   background-position: center;
 }
+.loads{
+  background: url('https://i.pinimg.com/originals/33/5f/6d/335f6d0c74c29626008bae58feb98808.gif');
+  height: 100vh;
+  
+  background-position: center;
+}
 .body:after{
   /*position: absolute;*/
   content: '';
@@ -93,6 +99,7 @@ body{
   color: white;
   text-decoration: none;
   font-family: 'Poppins',sans-serif;
+  font-size: 15px;
 }
 .field input[type="submit"]{
   background: #3498db;
@@ -161,4 +168,7 @@ i span{
 }
 .signup a:hover{
   text-decoration: underline;
+}
+.de{
+  margin: 0px 0;
 }

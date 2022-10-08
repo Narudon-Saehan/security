@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { AuthContext } from "../auth/Auth"
 import LoadingScreen from "./LoadingScreen"
 import swal from 'sweetalert2'
+import './HomeScreen.css'
 const HomeScreen = () => {
     const { checkLogout, dataUser, statusPasswordTime } = useContext(AuthContext)
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ const HomeScreen = () => {
             m = Math.ceil((t - d * cd - h * ch) / 60000),
             s = Math.ceil(60 + (t - d * cd - h * ch - m * cm) / 1000),
             pad = function (n) { return n < 10 ? '0' + n : n; };
-        m-=1;
+        m -= 1;
         if (s === 60) {
             m++;
             s = 0;
@@ -41,7 +42,7 @@ const HomeScreen = () => {
             h = 0;
         }
         setDay(d)
-        setMessage(d + "วัน" + pad(h) + "ชั่วโมง" + pad(m) + "นาที" + s + "วินาที")
+        setMessage(d + " วัน " + pad(h) + " ชั่วโมง " + pad(m) + " นาที " + s + " วินาที")
         if (loading) {
             setLoading(false)
         }
@@ -67,19 +68,26 @@ const HomeScreen = () => {
         //alert("คุณใช้ pasaword นี้มา 90 วันแล้วกรุณาเปลี่ยน password ใหม่")
         return window.location = "/resetPass"
     }
-    
+
     if (loading) {
         return <LoadingScreen />
     }
     return (
-        <div style={{ display: "flex", flexDirection: 'column', height: "100vh", justifyContent: 'center', alignItems: "center", backgroundColor: 'red' }}>
-            <h1>Home</h1>
-            <h2>ยินดีต้อนรับ</h2>
-            <h2>คุณ{dataUser?.firstName} {dataUser?.lastName}</h2>
-            <h2> คุณใช้ password นี้มาแล้วเป็นเวลา :{message}</h2>
-            <h2>{day >= 90 ? "คุณใช้passwordมา 90 วันแล้ว กรุณาเปลี่ยน password " : ""}</h2>
-            <input type="submit" onClick={() => logout()} value="LOGOUT " />
-        </div>
+        <body>
+            <div className="bg-img">
+                <div className="HomeBox">
+                    <h1 >Home</h1>
+                    <h2>ยินดีต้อนรับ</h2>
+                    <h2>Name: {dataUser?.firstName} {dataUser?.lastName}</h2>
+                    <div className="HometextTime"> คุณใช้ PASSWORD นี้มาแล้วเป็นเวลา </div>
+                        <div className="HomeTime">{message}</div>
+                    <h2>{day >= 90 ? "คุณใช้passwordมา 90 วันแล้ว กรุณาเปลี่ยน password " : ""}</h2>
+                    {/* <input class="Homebutton" type="submit" onClick={() => logout()} value="LOGOUT " /> */}
+                    <button type="button" class="btn btn-danger " onClick={() => logout()}  >LOG OUT</button>
+                    <button type="button" class="btn btn-primary" >GO TO LOGPAGE</button>
+                </div>
+            </div>
+        </body>
     )
 }
 export default HomeScreen;

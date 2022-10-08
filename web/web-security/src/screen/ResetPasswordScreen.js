@@ -62,14 +62,14 @@ const ResetPasswordScreen = () => {
             <div className="content">
                 <header>Reset Password</header>
                 <h3 style={{ color: "#fff" }}>{!statusPasswordTime ? "เนื่องจากคุณใช้ password นี้มามากกว่า 90 วันแล้วกรุณาเปลี่ยน" : ""}</h3>
-                <form>
+                <form onSubmit={rePassword}>
                     <div class="pass">
                         <label>New Password:</label>
                         <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                     </div>
                     <div class="field">
                         <span class="fa fa-user"></span>
-                        <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} />
+                        <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} required/>
                         <button type="button" onClick={() => showPassword("newpassword")}>show</button>
                         <br /><br />
                     </div>
@@ -79,7 +79,7 @@ const ResetPasswordScreen = () => {
                     </div>
                     <div class="field">
                         <span></span>
-                        <input type="password" id="veritypassword" placeholder="Verity Password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                        <input type="password" id="veritypassword" placeholder="Verity Password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required/>
                         <button type="button" class="showbutton" onClick={() => showPassword("veritypassword")}>show</button>
                         <br /><br />
                     </div>
@@ -87,7 +87,7 @@ const ResetPasswordScreen = () => {
                         <button class="btn btn-primary btn-lg" type="submit" value="Submit" />
                     </div> */}
                     <div className="space">
-                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>rePassword()} value="Submit">Submit</button>
+                        <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
                     </div>
                 </form>
             </div>

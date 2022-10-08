@@ -1,38 +1,15 @@
 import './LoadingScreen.css'
+import React from 'react'; 
+import { render } from 'react-dom';
+import $ from 'jquery'; 
+
+const LoadingScreen=()=>{
 
 
-const LoadingScreen =()=>{
-    
     return(
-        <body class="loadingscreen">
-            
-            <div class="boxes">
-            <div class="box">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="box">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="box">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-            <div class="box">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
+        <body class="loads">
         </body>
-    )
+        
+        )
 }
 export default LoadingScreen;

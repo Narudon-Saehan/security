@@ -37,13 +37,13 @@ const RegisterSucceedScreen = () => {
     const confirmRegister1 = () => {
         const swalWithBootstrapButtons = Swal.mixin({
             customClass: {
-              confirmButton: 'btn btn-danger',
-              cancelButton: 'btn btn-success'
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
             },
             buttonsStyling: false
-          })
+        })
 
-          swalWithBootstrapButtons.fire({
+        swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
             icon: 'warning',
@@ -51,25 +51,22 @@ const RegisterSucceedScreen = () => {
             confirmButtonText: 'Yes, confirm!',
             cancelButtonText: 'No, cancel!',
             reverseButtons: true
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
-              swalWithBootstrapButtons.fire(
-                'OK',
-                'NUTDANAI KAIROD',
-                'success'
-              )
-              confirmRegister();
+                swalWithBootstrapButtons.fire(
+                    'OK',
+                    'success'
+                )
+                confirmRegister();
             } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
             ) {
-              swalWithBootstrapButtons.fire(
-                'Cancelled',
-                'KUY 【8=DD】',
-                'error'
-              )
+                swalWithBootstrapButtons.fire(
+                    'Cancelled'
+                )
             }
-          })
+        })
     }
 
     useEffect(() => {
@@ -120,10 +117,7 @@ const RegisterSucceedScreen = () => {
             <div className="bg-img">
                 <div className="content">
                     <header>Register</header>
-                    <Link to="/">
-                        <button type="button" class="btn btn-primary btn-lg" value="go to Login">go to Login</button>
-
-                    </Link>
+                    <button type="button" onClick={()=> window.location = '/'} class="btn btn-primary btn-lg" value="go to Login">go to Login</button>
                 </div>
             </div>
         </body>

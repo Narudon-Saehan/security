@@ -115,12 +115,12 @@ const ForgotPasswordSucceedScreen = () => {
         }
     }
 
-    // useEffect(() => {
-    //     return ()=>{
-    //         checkToken()
-    //     }
-    // },[]);
-    if (!loading) {
+    useEffect(() => {
+        return ()=>{
+            checkToken()
+        }
+    },[]);
+    if (loading) {
         return <LoadingScreen />
     }
     if (error) {
@@ -132,17 +132,17 @@ const ForgotPasswordSucceedScreen = () => {
             <body>
                 <div className="bg-img">
                     <div className="content">
-                        <header>คำถาม : </header>
+                        <header>Question : </header>
                         <div class="pass">
-                            <label>{"dataFormToken.question"} </label>
+                            <label>{dataFormToken.question}</label>
                         </div>
                         <form onSubmit={checkAnswer}>
                             <div class="field">
                                 <span class="fa fa-user"></span>
-                                <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" /><br /><br />
+                                <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required/><br /><br />
                             </div>
                             <div className="space">
-                                <button type="button" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+                                <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -152,18 +152,34 @@ const ForgotPasswordSucceedScreen = () => {
     }
     ///////รีรหัสผ่านถ้าตอบถูก
     return (
-        <div style={{ display: "flex", flexDirection: 'column', height: "100vh", justifyContent: 'center', alignItems: "center", backgroundColor: 'red' }}>
-            <h1>Reset Password</h1>
-            <form onSubmit={submitChangePassword}>
-                <label >New Password:</label>
-                <input type="password" value={password} onChange={(e) => checkPassword(e.target.value)} />
-                <label>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label><br /><br />
-                <label>Repeat Password:</label>
-                <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
-                <label>{repeatPassword === "" ? "" : (password === repeatPassword) ? "the same" : "not the same"}</label><br /><br />
-                <input type="submit" value="Submit" />
-            </form>
-        </div>
+        <body>
+            <div className="bg-img">
+                <div className="content">
+                    <header>Reset Password</header>
+                    <form onSubmit={submitChangePassword}>
+                        <div class="pass">
+                            <label >New Password:</label>
+                            &ensp;&ensp;
+                            <label style={{ color: statusPassword ? "red" : "green" }}>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                        </div>
+                        <div class="field">
+                            <span class="fa fa-user"></span>
+                            <input type="password" value={password} onChange={(e) => checkPassword(e.target.value)} />
+                        </div>
+                        <div class="pass">
+                            <label>Repeat Password:</label>
+                            <label style={{ color: statusPassword ? "red" : "green" }}>{repeatPassword === "" ? "" : (password === repeatPassword) ? "the same" : "not the same"}</label>
+                        </div>
+                        <div class="field">
+                            <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                        </div>
+                        <div class="field space">
+                            <input type="submit" value="Register" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </body>
     )
 }
 export default ForgotPasswordSucceedScreen;

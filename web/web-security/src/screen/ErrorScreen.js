@@ -2,6 +2,7 @@ import { useNavigate,Navigate } from "react-router-dom"
 import React,{ useContext } from "react"
 import { AuthContext } from "../auth/Auth"
 import './ErrorScreen.css'
+//import emoji from 'https://cdn3.iconfinder.com/data/icons/emoji/100/Emoji_Sorry-512.png'
 const ErrorScreen =()=>{
 
     const goHome=()=>{
@@ -10,15 +11,21 @@ const ErrorScreen =()=>{
     }
     return(
         <div style={{display: "flex",flexDirection:'column',height:"100vh",justifyContent:'center',alignItems:"center"}}>
-            <div style={{display:"flex",alignItems:"center",width:400,height:300,backgroundColor: 'rgba(255, 255, 255, 0.5)',borderRadius:15}}>
-                <div>
-                    <h1 style={{color:"black",fontSize:15}}>Error Go to Login </h1>
-                </div>
-
-                <button type="button" onClick={()=>goHome()} class="btn btn-primary">Home</button>
+            
+            
+                <img className="Errorimage" src={'https://media.baamboozle.com/uploads/images/44393/1655378134_54303.png'}></img>
+                <div className='textError'>ERROR </div>
+                <div className="Errorpage">404</div> 
+                <div className='textpageError'>Page Not Found !!</div>
+                {/* <div className='textError'>Go to Login </div>  */}
+                <button type="button" class="btn btn-outline-warning">Go to Home</button>
                 
-            </div>
-        </div>
+                
+             
+                
+                
+        </div> 
+        
         
     )
 }

@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { AuthContext } from "../auth/Auth"
 import axios from "axios"
 import validator from 'validator'
+import LoadingScreen from "./LoadingScreen"
 import './LoginScreen.css'
 import './RegisterScreen.css'
 const ResetPasswordScreen = () => {
@@ -10,6 +11,9 @@ const ResetPasswordScreen = () => {
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
     const [statusPassword, setStatusPassword] = useState(undefined)
+    const [messagePassword, setMessagePassword] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const Swal = require('sweetalert2')
 
     const checkPassword = (value) => {
         setPassword(value)
@@ -31,37 +35,81 @@ const ResetPasswordScreen = () => {
         }
     }
 
-    const rePassword = ()=>{
+    const rePassword = (e)=>{
+        e.preventDefault();
+        if(!statusPassword){
+            Swal.fire({
+                icon: 'error',
+                title: 'Reset password fail',
+                text: "Password is not strong",
+            })
+            return
+        }
+        if(!(password === repeatPassword)){
+            //alert("Password not match confirm password")
+            Swal.fire({
+                icon: 'error',
+                title: 'Reset password fail',
+                text: "Password not match confirm password",
+            })
+            return
+        }
+        setLoading(true)
         axios.post("http://localhost:5000/resetPassword",{
                 id:dataUser.id,
                 password:password
             }).then((response)=>{
                 if(response.data.status === "duplicate"){
-                    alert(response.data.message)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reset password fail',
+                        text: "Do not use the old password",
+                    })
+                    setLoading(false)
                 }else if(response.data.status === "ok"){
                     localStorage.setItem("tokenLogin", response.data.token)
-                    alert("succuss")
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reset password succuss',
+                        text: "Go to home",
+                    })
+                    setLoading(false)
                     window.location = '/home'
                 }
                 console.log(response.data.status);
             }).catch(()=>{
-                alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/resetPassword")
+                Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/resetPassword")
+                setLoading(false)
             })
     }
     
-    useEffect(() => {
-        return () => {
-            console.log("test");
-        }
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         console.log("test");
+    //     }
+    // }, []);
+
     if (checkLogout) {
         return window.location = '/'
     }
+    if(loading){
+        return <LoadingScreen/>
+    }
     return (
         <div className="bg-img">
+            {messagePassword?
+                    <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
+                        <strong>Warning!</strong>
+                        <label>Passwords must be at least 8 characters in length</label>
+                        <label>a minimum of 1 lower case letter [a-z]</label>
+                        <label>a minimum of 1 upper case letter [A-Z]</label>
+                        <label>a minimum of 1 numeric character [0-9]</label>
+                        <label>{'a minimum of 1 special character: ~`!@#$%^&*()-_+={}[]|;:"<>,./?'}</label>
+                    </div>
+                :<></>}
             <div className="content">
                 <header>Reset Password</header>
-                <h3 style={{ color: "#fff" }}>{!statusPasswordTime ? "เนื่องจากคุณใช้ password นี้มามากกว่า 90 วันแล้วกรุณาเปลี่ยน" : ""}</h3>
+                <h3 style={{ color: "#fff" }}>{!statusPasswordTime ? "Since you've been using this password for more than 90 days, please change it." : ""}</h3>
                 <form onSubmit={rePassword}>
                     <div class="pass">
                         <label>New Password:</label>
@@ -69,7 +117,7 @@ const ResetPasswordScreen = () => {
                     </div>
                     <div class="field">
                         <span class="fa fa-user"></span>
-                        <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} required/>
+                        <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} onFocus={()=>setMessagePassword(true)} onBlur={()=>setMessagePassword(false)} required/>
                         <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("newpassword")}>show</button>
                         <br /><br />
                     </div>
@@ -80,7 +128,7 @@ const ResetPasswordScreen = () => {
                     <div class="field">
                         <span></span>
                         <input type="password" id="veritypassword" placeholder="Verity Password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required/>
-                        <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("veritypassword")}>show</button>
+                        {/* <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("veritypassword")}>show</button> */}
                         <br /><br />
                     </div>
                     {/* <div class="btn_submit">
@@ -89,10 +137,10 @@ const ResetPasswordScreen = () => {
                     <div className="space">
                         <button type="submit" class="btn btnRegister btn-primary btn-lg" value="Submit">Submit</button>
                     </div>
-                    <div class="space">
-                        <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
-                    </div>
                 </form>
+                <div class="space">
+                    <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
+                </div>
             </div>
         </div>
 

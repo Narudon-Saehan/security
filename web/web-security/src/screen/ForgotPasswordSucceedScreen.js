@@ -1,13 +1,11 @@
 import { useParams } from "react-router-dom"
-import React, { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../auth/Auth"
+import React, { useEffect, useState } from "react"
 import validator from 'validator'
 import axios from "axios"
 import LoadingScreen from "./LoadingScreen"
 import ErrorScreen from "./ErrorScreen"
 import './RegisterScreen.css'
 const ForgotPasswordSucceedScreen = () => {
-    const { checkLogout, dataUser } = useContext(AuthContext)
     const params = useParams()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -17,22 +15,27 @@ const ForgotPasswordSucceedScreen = () => {
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
     const [statusPassword, setStatusPassword] = useState(undefined)
+    const Swal = require('sweetalert2')
+    
     const checkToken = () => {
         axios.post("http://localhost:5000/forgotPassword/authen", {
             token: params.token
         })
             .then((res) => {
                 if (res.data.status === "ok") {
-                    console.log(res.data);
                     setDataFormToken(res.data.decoded)
                     setLoading(false)
                 } else {
-                    alert("ลิ้งของคุณไม่ถูกต้อง หรือ หมดเวลาไปแล้ว")
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Fail',
+                        text: "Your link is invalid or timed out.",
+                    })
                     setError(true)
                     setLoading(false)
                 }
             }).catch(() => {
-                alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/forgotPassword/authen โปรดแจ้ง admin");
+                Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/forgotPassword/authen โปรดแจ้ง admin");
                 setLoading(false)
             })
     }
@@ -47,9 +50,18 @@ const ForgotPasswordSucceedScreen = () => {
             .then((res) => {
                 if (res.data.status === "ok") {
                     if (res.data.message === "correct") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: "Correct answer",
+                        })
                         setStatusQuestion(true)
                     } else {
-                        alert("คำตอบผิด")
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Fail',
+                            text: "Wrong answer",
+                        })
                     }
                     setLoading(false)
                 } else {

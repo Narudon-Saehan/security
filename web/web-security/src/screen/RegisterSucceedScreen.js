@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import LoadingScreen from "./LoadingScreen";
+import ErrorScreen from "./ErrorScreen";
 import './LoginScreen.css';
 
 const RegisterSucceedScreen = () => {
     const { token } = useParams();
     const [dataUser, setDataUser] = useState();
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const [statusRegister, setStatusRegister] = useState(false);
     const Swal = require('sweetalert2')
 
@@ -78,8 +80,13 @@ const RegisterSucceedScreen = () => {
                     .then((res) => {
                         console.log(res.data);
                         if (res.data.status === "error") {
-                            alert(res.data.message)
-                            window.location = '/error'
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Fail',
+                                text: "Your link is invalid or timed out.",
+                            })
+                            setError(true)
+                            setLoading(false)
                         } else {
                             if (res.data.message === "found email") {
                                 setStatusRegister(true)
@@ -96,6 +103,9 @@ const RegisterSucceedScreen = () => {
 
     if (loading) {
         return <LoadingScreen />
+    }
+    if (error){
+        return <ErrorScreen/>
     }
     if (!statusRegister) {
         return (

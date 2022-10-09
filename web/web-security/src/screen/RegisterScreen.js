@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
 import { AuthContext } from "../auth/Auth"
+import { sendEmail } from "../sendEmail/sendEmail";
 import './LoginScreen.css';
 import './RegisterScreen.css'
 
@@ -19,19 +20,58 @@ const RegisterScreen = () => {
     const [statusEmail, setStatusEmail] = useState(undefined)
     const [statusPassword, setStatusPassword] = useState(undefined)
     const [messagePassword, setMessagePassword] = useState(false)
+    const [register, setRegister] = useState(false)
+    const [token, setToken] = useState()
     const [loading, setLoading] = useState(false)
+    const Swal = require('sweetalert2')
+
+    const sendEmailSucceed = ()=>{
+        Swal.fire({
+            icon: 'success',
+            title: 'Check your email index',
+            text: "We sent an email link to complete your registrationt ",
+        })
+        setRegister(true)
+        setLoading(false)
+    }
+    const sendEmailFailed = (Errortext)=>{
+        Swal.fire({
+            icon: 'error',
+            title: 'Send email fail',
+            text: Errortext,
+        })
+        setLoading(false)
+    }
+    const setSendEmail = (dataToken)=>{
+        let message = "http://localhost:3000/RegisterSucceedScreen/" + dataToken
+        setLoading(true)
+        sendEmail(email,message,sendEmailSucceed,sendEmailFailed)
+    }
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if(!statusEmail){
-            alert("This email is already in use.")
+            Swal.fire({
+                icon: 'error',
+                title: 'Register fail',
+                text: "This email is already in use.",
+            })
             return
         }
         if(!statusPassword){
-            alert("password is not strong")
+            Swal.fire({
+                icon: 'error',
+                title: 'Register fail',
+                text: "Password is not strong",
+            })
             return
         }
-        if(password === repeatPassword){
-            alert("password is not strong")
+        if(!(password === repeatPassword)){
+            Swal.fire({
+                icon: 'error',
+                title: 'Register fail',
+                text: "Password not match confirm password",
+            })
             return
         }
         
@@ -45,30 +85,39 @@ const RegisterScreen = () => {
                 question: question,
                 answer: answer
             }).then((res) => {
-                console.log(res.data.token);
-                let link = "http://localhost:3000/RegisterSucceedScreen/" + res.data.token
-                let temp = {
-                    user_name: "test",
-                    user_email: email,
-                    message: link
-                }
-                emailjs.send('service_1izkvhc', 'template_l86x5fe', temp, 'G_I1Fw-Q-S55niWyy')
-                    .then((result) => {
-                        console.log("OK");
-                        console.log(result.text);
-                        alert("ส่งข้อมูลไปที่เมลแล้ว")
-                        setLoading(false)
-                        window.location = '/'
-                    }, (error) => {
-                        alert(error.text);
-                        setLoading(false)
-                    });
+                // console.log(res.data.token);
+                setToken(res.data.token)
+                setSendEmail(res.data.token)
+                // let link = "http://localhost:3000/RegisterSucceedScreen/" + res.data.token
+                // let temp = {
+                //     user_name: "test",
+                //     user_email: email,
+                //     message: link
+                // }
+                // emailjs.send('service_1izkvhc', 'template_l86x5fe', temp, 'G_I1Fw-Q-S55niWyy')
+                //     .then((result) => {
+                //         Swal.fire({
+                //             icon: 'success',
+                //             title: 'Check your email index',
+                //             text: "We sent an email link to complete your registrationt ",
+                //         })
+                //         setRegister(true)
+                //         setLoading(false)
+                //         // window.location = '/'
+                //     }, (error) => {
+                //         Swal.fire({
+                //             icon: 'error',
+                //             title: 'Send email fail',
+                //             text: error.text,
+                //         })
+                //         setLoading(false)
+                //     });
             }).catch(() => {
-                alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
+                Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
                 setLoading(false)
             })
         } else {
-            alert("กรอกข้อมูลไม่ครบ");
+            Swal.fire("Please complete the information.");
             setLoading(false)
         }
     }
@@ -78,7 +127,6 @@ const RegisterScreen = () => {
             axios.post("http://localhost:5000/checkUserName", {
                 email: value
             }).then((res) => {
-                console.log(res.data);
                 if (res.data.status === "ok") {
                     if (res.data.message === "not found username") {
                         setStatusEmail(true)
@@ -86,10 +134,10 @@ const RegisterScreen = () => {
                         setStatusEmail(false)
                     }
                 } else {
-                    alert(res.data.message)
+                    Swal.fire(res.data.message)
                 }
             }).catch(() => {
-                alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/checkUserName");
+                Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/checkUserName");
             })
         } else {
             setStatusEmail(undefined)
@@ -112,6 +160,36 @@ const RegisterScreen = () => {
     if (loading) {
         return <LoadingScreen />
     }
+    if(register){
+        return(
+            <div style={{ display: "flex", flexDirection: 'column', height: "100vh", justifyContent: 'center', alignItems: "center" }}>
+            <div className="bg-img">
+                <div className="content">
+                    <header>Check your email index</header>
+                    <p class="forgettext" style={{ fontSize: "16px", color: "white" }}>We sent an email link to complete your registrationt.</p>
+
+
+                    <div class="space">
+                        <button type="button" class="btn btnRegister btn-primary btn-lg" value="Resend Email" onClick={()=>setSendEmail(token)} >
+                            Resend Email
+                        </button>
+                    </div>
+
+                    <div class="space">
+                        <p class="forgettext" style={{ fontSize: "12px", color: "#FFE5D9" }}>Tip: Check your spam folder in case the email was incorrectly identified</p>
+                    </div>
+
+                    <div class="space">
+                        <button type="button" class="btn btnRegister btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
+                            Go to login
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        )
+    }
     return (
         <body>
             <div className="bg-img">
@@ -119,7 +197,6 @@ const RegisterScreen = () => {
                     <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
                         <strong>Warning!</strong>
                         <label>Passwords must be at least 8 characters in length</label>
-                        <label>a minimum of 1 numeric character [0-9]</label>
                         <label>a minimum of 1 lower case letter [a-z]</label>
                         <label>a minimum of 1 upper case letter [A-Z]</label>
                         <label>a minimum of 1 numeric character [0-9]</label>

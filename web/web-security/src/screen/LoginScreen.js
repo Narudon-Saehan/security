@@ -16,28 +16,15 @@ const LoginScreen = () => {
     const [address, setAddress] = useState(null)
     //const [test,setTest] = useState(false)
     const [Verifield, setVerifield] = useState(false)
+    const Swal = require('sweetalert2')
 
     const handleOnChange = (value) => {
-        console.log("Captcha value:", value);
         setVerifield(true)
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-        // axios.post("http://localhost:5000/testAddLog",{
-        //     data_log:JSON.stringify({
-        //             log_datetime : new Date().toISOString(),ipv4 : "158.108.228.133",country : "Thailand",latitude : 13.75,longitude : 100.4667,
-        //             log_email : "test@email.com",status_email : true,status_login : true,
-        //         })
-        //     })
-        //     .then((response)=>{
-        //         console.log(response.data);
-        //     })
-        //     .catch((err)=>{
-        //         alert("ไม่สามารถเชื่อมต่อกับ https://geolocation-db.com โปรดแจ้ง admin")
-        //     })
-
         if(!Verifield){
-            alert("Please confirm that you are not using a robot.")
+            Swal.fire("Please confirm that you are not using a robot.")
             return
         }
         setLoading(true)
@@ -56,15 +43,18 @@ const LoginScreen = () => {
                 if (response.data.status === "ok") {
                     localStorage.setItem("tokenLogin", response.data.token)
                     window.location = '/home'
-
                 } else {
-
-                    alert(response.data.message)
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login failed',
+                        text: response.data.message,
+                    })
+                    setLoading(false)
+                    // alert(response.data.message)
                 }
-                setLoading(false)
             })
         } else {
-            alert("กรุณากรอก username และ รหัสผ่านให้ครบ")
+            Swal.fire("Please complete the information.");
             setLoading(false)
         }
 
@@ -73,18 +63,18 @@ const LoginScreen = () => {
         return () => {
             axios.get("https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572")
                 .then((res) => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     setAddress(res.data)
                     setLoading(false)
                 }).catch((err) => {
-                    console.log(err);
-                    alert("ไม่สามารถเชื่อมต่อกับ https://geolocation-db.com โปรดแจ้ง admin")
+                    //console.log(err);
+                    Swal.fire("unable to connect to https://geolocation-db.com please inform admin")
                     setLoading(false)
                 })
         }
     }, [])
     if (!checkLogout) {
-        return <Navigate to="/home" />
+        return window.location = "/home"
     }
     if (loading) {
         return (

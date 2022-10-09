@@ -139,7 +139,7 @@ app.post("/login", (req, res) => {
                             res.json({ status: 'error', message: err })
                             //console.log(err);
                         } else {
-                            res.json({ status: 'error', message: "no email found" })
+                            res.json({ status: 'error', message: "Wrong email or password" })
                         }
                     })
                 //res.json({ status: 'error', message: "no email found" })
@@ -167,7 +167,7 @@ app.post("/login", (req, res) => {
                                     res.json({ status: 'error', message: err })
                                     //console.log(err);
                                 } else {
-                                    res.json({ status: 'error', message: "login failed" })
+                                    res.json({ status: 'error', message: "Wrong email or password" })
                                     //res.send(result);
                                 }
                             })

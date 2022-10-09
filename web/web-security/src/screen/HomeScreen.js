@@ -2,7 +2,7 @@ import { useNavigate, Navigate } from "react-router-dom"
 import React, { useContext, useState, useEffect } from "react"
 import { AuthContext } from "../auth/Auth"
 import LoadingScreen from "./LoadingScreen"
-import swal from 'sweetalert2'
+import { FiAlertTriangle } from "react-icons/fi";
 import './HomeScreen.css'
 const HomeScreen = () => {
     const { checkLogout, dataUser, statusPasswordTime } = useContext(AuthContext)
@@ -79,15 +79,23 @@ const HomeScreen = () => {
                     <h1 >Home</h1>
                     <h2>Welcome</h2>
                     <h2>Name: {dataUser?.firstName} {dataUser?.lastName}</h2>
-                    <div className="HometextTime"> คุณใช้ PASSWORD นี้มาแล้วเป็นเวลา </div>
+                    <div className="HometextTime"> You have been using this password  </div>
                         <div className="HomeTime">{message}</div>
                     <h2>{day >= 90 ? "คุณใช้passwordมา 90 วันแล้ว กรุณาเปลี่ยน password " : ""}</h2>
                     {/* <input class="Homebutton" type="submit" onClick={() => logout()} value="LOGOUT " /> */}
                     {/* <div className="cen"> */}
                     <div className="space">
+                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"} >GO TO LOGPAGE</button>
+                    </div>
+                    <div className="space">
+                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/resetPass"} >RESET PASSWORD</button>
+                    </div>
+                    <div className="space">
+                        <button type="button" class="btn btn-danger btn-lg" onClick={()=>window.location = "/dontClick"}><FiAlertTriangle size={50}/>DON'T CLICK</button>
+                    </div>
+                    <div className="space">
                         <button type="button" class="btn btn-danger btn-lg " onClick={() => logout()}  >LOG OUT</button>
                     </div>
-                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"} >GO TO LOGPAGE</button>
                     {/* </div> */}
                 </div>
             {/* </div> */}

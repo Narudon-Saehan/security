@@ -9,7 +9,7 @@ import './LogScreen.css';
 const LogScreen = () => {
     const params = useParams()
     var moment = require('moment');
-    const { checkLogout } = useContext(AuthContext);
+    const { checkLogout ,statusPasswordTime} = useContext(AuthContext);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     const [dataLog, setDataLog] = useState({ data: [] })
@@ -69,6 +69,9 @@ const LogScreen = () => {
     if (checkLogout) {
         return window.location = "/home"
     }
+    if (!statusPasswordTime) {
+        return window.location = "/resetPass"
+    }
     if (loading) {
         return <LoadingScreen />
     }
@@ -77,6 +80,7 @@ const LogScreen = () => {
     }
     return (
         <div>
+            <button type="button" class="btn btn-secondary" onClick={()=>window.location="/home"}>GO TO HOME</button>
             <div className="input-group mt-3">
                 <span className="input-group-text">Search</span>
                 <span className="input-group-text" >Date</span>

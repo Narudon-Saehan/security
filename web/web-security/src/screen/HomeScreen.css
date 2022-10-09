@@ -42,7 +42,7 @@ body {
   text-align: center;
   padding: 60px 32px;
   width: 50%;
-  height: 500px;
+  /* height: 500px; */
   /* transform: translate(-50%, -50%); */
   background-color: rgba(255, 255, 255, 0.841);
   box-shadow: -1px 4px 28px 0px rgba(0, 0, 0, 0.75);

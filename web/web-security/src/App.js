@@ -9,6 +9,7 @@ import ForgotPasswordSucceedScreen from './screen/ForgotPasswordSucceedScreen';
 import TestSendMail from './screen/TestSendMail';
 import RegisterSucceedScreen from './screen/RegisterSucceedScreen';
 import LogScreen from './screen/LogScreen';
+import DontClick from './screen/DontClick';
 
 import LoadingScreen from './screen/LoadingScreen';
 import ErrorScreen from './screen/ErrorScreen';
@@ -45,6 +46,8 @@ function App() {
           <Route path='/resetPass' element={<ResetPasswordScreen/>}/>
           <Route path='/RegisterSucceedScreen/:token' element={<RegisterSucceedScreen/>}/>
           <Route path='/Log/:date/:email/:statusEmail/:statusLogin/:page' element={<LogScreen/>}/>
+          <Route path='/dontClick' element={<DontClick/>}/>
+
 
           <Route path='/TestSendMail' element={<TestSendMail/>}/>
           <Route path='/loading' element={<LoadingScreen/>}/>

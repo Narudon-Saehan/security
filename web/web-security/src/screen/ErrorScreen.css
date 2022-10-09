@@ -39,7 +39,27 @@
 }
 
 .Errorimage {
-    margin-top: -20px;
-    width: 200px;
+    /* margin-top: -20px; */
+    width: 300px;
     color: azure;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
 }
+
+.Errorpagebox {
+    margin-top: 50px;
+    flex-direction: column;
+    display: "flex";
+    justify-content: center;
+    /* height:"100vh"; */
+    align-Items:"center";
+}
+.btnError{
+    width: 15%;
+}
+.cen{
+    text-align: center;
+}
+

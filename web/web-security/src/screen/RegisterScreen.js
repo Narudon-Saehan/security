@@ -16,13 +16,27 @@ const RegisterScreen = () => {
     const [lastName, setLastName] = useState("")
     const [question, setQuestion] = useState("")
     const [answer, setAnswer] = useState("")
-    const [statusUserName, setStatusUserName] = useState(undefined)
+    const [statusEmail, setStatusEmail] = useState(undefined)
     const [statusPassword, setStatusPassword] = useState(undefined)
+    const [messagePassword, setMessagePassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault();
+        if(!statusEmail){
+            alert("This email is already in use.")
+            return
+        }
+        if(!statusPassword){
+            alert("password is not strong")
+            return
+        }
+        if(password === repeatPassword){
+            alert("password is not strong")
+            return
+        }
+        
         setLoading(true)
-        if (statusUserName && password && firstName && lastName && question && answer) {
+        if (email && password && firstName && lastName && question && answer) {
             axios.post("http://localhost:5000/register", {
                 email: email,
                 password: password,
@@ -67,9 +81,9 @@ const RegisterScreen = () => {
                 console.log(res.data);
                 if (res.data.status === "ok") {
                     if (res.data.message === "not found username") {
-                        setStatusUserName(true)
+                        setStatusEmail(true)
                     } else if (res.data.message === "found username") {
-                        setStatusUserName(false)
+                        setStatusEmail(false)
                     }
                 } else {
                     alert(res.data.message)
@@ -78,7 +92,7 @@ const RegisterScreen = () => {
                 alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/checkUserName");
             })
         } else {
-            setStatusUserName(undefined)
+            setStatusEmail(undefined)
         }
     }
     const changePassword = (value) => {
@@ -101,13 +115,24 @@ const RegisterScreen = () => {
     return (
         <body>
             <div className="bg-img">
+                {messagePassword?
+                    <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
+                        <strong>Warning!</strong>
+                        <label>Passwords must be at least 8 characters in length</label>
+                        <label>a minimum of 1 numeric character [0-9]</label>
+                        <label>a minimum of 1 lower case letter [a-z]</label>
+                        <label>a minimum of 1 upper case letter [A-Z]</label>
+                        <label>a minimum of 1 numeric character [0-9]</label>
+                        <label>{'a minimum of 1 special character: ~`!@#$%^&*()-_+={}[]|;:"<>,./?'}</label>
+                    </div>
+                :<></>}
                 <div className="content">
                     <header>Register</header>
                     <form onSubmit={handleSubmit}>
                         <div class="pass de">
                             <label for="email" class="form-label">Email:</label>
                             &ensp;&ensp;
-                            <label style={{ color: statusUserName ? "red" : "green" }}>{(email === "") ? "" : (statusUserName === undefined) ? "userNameต้องมีอย่างน้อย 6 ตัว" : statusUserName ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
+                            <label style={{ color: statusEmail ? "#66ccff" : "red" }}>{(email === "") ? "" : statusEmail ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
                         </div>
                         <div class="fields ">
                             <span class="fa fa-user"></span>
@@ -117,18 +142,19 @@ const RegisterScreen = () => {
                             <div class="pass de ">
                                 <label>Password : </label>
                                 &ensp;&ensp;
-                                <label style={{ color: statusPassword ? "red" : "green" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                                <label style={{ color: statusPassword ? "#66ccff" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                                
                             </div>
                             <div class="fields">
                                 <span></span>
-                                <input type="password" value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required />
+                                <input type="password" value={password} onFocus={()=>setMessagePassword(true)} onBlur={()=>setMessagePassword(false)} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required/>
                             </div>
                         </div>
                         <div className="space">
                             <div class="pass de">
                                 <label>Confirm Password : </label>
                                 &ensp;&ensp;
-                                <label style={{ color: statusPassword ? "red" : "green" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                                <label style={{ color: statusPassword ? "#66ccff" : "red" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Match" : "Not match"}</label>
                             </div>
                             <div class="fields">
                                 <span></span>
@@ -142,7 +168,7 @@ const RegisterScreen = () => {
                             </div>
                             <div class="fields ">
                                 <span></span>
-                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" /><br /><br />
+                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" required/><br /><br />
 
                             </div>
                         </div>
@@ -153,7 +179,7 @@ const RegisterScreen = () => {
                             </div>
                             <div class="fields">
                                 <span></span>
-                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" /><br /><br />
+                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" required/><br /><br />
                             </div>
                         </div>
                         <div className="space">
@@ -162,7 +188,7 @@ const RegisterScreen = () => {
                                 &ensp;&ensp;
                             </div>
                             <div style={{}}>
-                                <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} style={{ height: "2.9em" }}>
+                                <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} style={{ height: "2.9em" }} required>
                                     <option value="">Please select a question</option>
                                     <option value="what's your favorite food">what's your favorite food</option>
                                     <option value="What was your first pet's name?">What was your first pet's name?</option>
@@ -177,17 +203,15 @@ const RegisterScreen = () => {
                         </div>
                         <div className="fields">
                             <span></span>
-                            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" />
+                            <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required/>
                             <br /><br />
                         </div>
                         <div class="space">
-                            <button type="button" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+                            <button type="submit" class="btn btnRegister btn-primary btn-lg" value="Submit">Submit</button>
                         </div>
-
-
                     </form>
                     <div class="space">
-                        <button type="button" onClick={() => window.location = '/'} class="btn btn-danger btn-lg" value="go to Login">Cancle</button>
+                        <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
                     </div>
                 </div>
             </div>

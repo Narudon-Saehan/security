@@ -10,7 +10,7 @@ const ErrorScreen =()=>{
         //navigate("/")
     }
     return(
-        <div style={{display: "flex",flexDirection:'column',height:"100vh",justifyContent:'center',alignItems:"center"}}>
+        <div className="Errorpagebox">
             
             
                 <img className="Errorimage" src={'https://media.baamboozle.com/uploads/images/44393/1655378134_54303.png'}></img>
@@ -18,12 +18,9 @@ const ErrorScreen =()=>{
                 <div className="Errorpage">404</div> 
                 <div className='textpageError'>Page Not Found !!</div>
                 {/* <div className='textError'>Go to Login </div>  */}
-                <button type="button" class="btn btn-outline-warning">Go to Home</button>
-                
-                
-             
-                
-                
+                <div className="cen">
+                    <button type="button" class="btn btnError btn-outline-warning" onClick={()=> window.location ="/home"}>Go to Home</button>
+                </div> 
         </div> 
         
         

@@ -29,6 +29,25 @@ body {
   box-shadow: -1px 4px 28px 0px rgba(0, 0, 0, 0.75);
 }
 
+.contentsHome {
+  /* align-items: center;  */
+  flex-direction: column; 
+  /* margin: 50px 50px 50px 190px; */
+  
+  /* margin-top: 100px;  */
+  margin-top: 50px;
+  margin-left:auto;
+  margin-right: auto;
+  border-radius: 15px;
+  text-align: center;
+  padding: 60px 32px;
+  width: 50%;
+  height: 500px;
+  /* transform: translate(-50%, -50%); */
+  background-color: rgba(255, 255, 255, 0.841);
+  box-shadow: -1px 4px 28px 0px rgba(0, 0, 0, 0.75);
+}
+
 .contents header {
   color: white;
   font-size: 33px;
@@ -49,24 +68,33 @@ body {
   font-size: 30px;
   font-weight: bolder;
   font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  /* color: white; */
 }
 .HomeTime {
   font-size: 25px;
   font-weight: lighter;
   font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+  /* color: white; */
 }
 
 .Homebox {
-  align-items: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 999;
+  width: 500px;
+  height: 600px;
+  /* align-items: center; */
+  background-color: rgba(255, 255, 255, 0.841); 
+  color: white;
+}
+
+.btnError{
+  width: 15%;
+  flex-direction: column;
+}
+.cen{
   text-align: center;
-  padding: 60px 32px;
-  width: 80%;
-  height: 500px;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.841);
-  box-shadow: -1px 4px 28px 0px rgba(0, 0, 0, 0.75);
+  flex-direction: column;
+
+}
+.space{
+  margin-bottom: 10px;
+  
 }

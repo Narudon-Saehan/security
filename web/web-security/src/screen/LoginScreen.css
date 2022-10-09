@@ -2,19 +2,20 @@
 *{
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  /*box-sizing: border-box;*/
   user-select: none;
 }
 body{
   background: url('https://img.freepik.com/premium-photo/hacker-silhouette-dark-green-binary-background-hacker-silhouette-binary-codes-toned-picture-silhouette-hacker-hoodie-hacking-malware-concept_256259-2363.jpg?w=2000');
-  height: 100vh;
+  /*height: 100vh;*/
   background-size: cover;
   background-position: center;
 }
 .loads{
-  background: url('https://i.pinimg.com/originals/33/5f/6d/335f6d0c74c29626008bae58feb98808.gif');
+  /* background: url('https://im5.ezgif.com/tmp/ezgif-5-b2e6708e45.gif'); */
+  background: url('https://media3.giphy.com/media/lp3GUtG2waC88/giphy.gif'); 
   height: 100vh;
-  
+  /*background-size: cover;*/
   background-position: center;
 }
 .body:after{

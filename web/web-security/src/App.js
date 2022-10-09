@@ -17,7 +17,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Link to="/">Login</Link>
+      {/* <label style={{color:"blue"}} onClick={()=>window.location = "/"}>Login</label>
         &ensp;&ensp;&ensp;
         <Link to="/register">Register</Link>
         &ensp;&ensp;&ensp;
@@ -31,11 +31,11 @@ function App() {
         &ensp;&ensp;&ensp;
         <Link to="/ForgotPassScreen/1">ForgotPasswordSucceedScreen</Link>
         &ensp;&ensp;&ensp;
-        <Link to="/Log">Log</Link>
+        <label style={{color:"blue"}} onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"}>Log</label>
         &ensp;&ensp;&ensp;
         <Link to="/loading">loading</Link>
         &ensp;&ensp;&ensp;
-        <Link to="/error">error</Link>
+        <Link to="/error">error</Link> */}
         <Routes>
           <Route path='/' element={<LoginScreen/>}/>
           <Route path='/register' element={<RegisterScreen/>}/>
@@ -44,7 +44,7 @@ function App() {
           <Route path='/ForgotPassScreen/:token' element={<ForgotPasswordSucceedScreen/>}/>
           <Route path='/resetPass' element={<ResetPasswordScreen/>}/>
           <Route path='/RegisterSucceedScreen/:token' element={<RegisterSucceedScreen/>}/>
-          <Route path='/Log' element={<LogScreen/>}/>
+          <Route path='/Log/:date/:email/:statusEmail/:statusLogin/:page' element={<LogScreen/>}/>
 
           <Route path='/TestSendMail' element={<TestSendMail/>}/>
           <Route path='/loading' element={<LoadingScreen/>}/>

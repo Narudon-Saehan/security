@@ -358,14 +358,40 @@ app.post('/testAddLog', (req, res) => {
 })
 
 app.post('/getLog', (req, res) => {
-    const log_date = req.body.log_date
-    db.query("SELECT * FROM log WHERE log_date=SUBSTRING(CONVERT_TZ(?,'+00:00','+7:00'),1,10)",
-        [log_date], (err, result) => {
+    const log_date = req.body.log_date==="all"?"all":req.body.log_date
+    const emailSearch = req.body.emailSearch
+    const statusEmail = req.body.statusEmail==="all"?"all":req.body.statusEmail==="yes"?true:false
+    const statusLogin= req.body.statusLogin==="all"?"all":req.body.statusLogin==="yes"?true:false
+    const page= req.body.page
+    console.log(page);
+
+    let sqlLog_date =""
+    let sqlStatusEmail=""
+    let sqlStatusLogin=""
+    let dataSearch = [emailSearch]
+
+    if(log_date!=="all"){
+        sqlLog_date = " AND log_date=?"
+        dataSearch.push(log_date)
+    }
+
+    if(statusEmail!=="all"){
+        sqlStatusEmail = " AND status_email=?"
+        dataSearch.push(statusEmail)
+    }
+    if(statusLogin!=="all"){
+        sqlStatusLogin = " AND status_login=?"
+        dataSearch.push(statusLogin)
+    }
+    //console.log("SELECT * FROM log WHERE LOCATE(?, log_email)!=0"+sqlLog_date+sqlStatusEmail+sqlStatusLogin+" ORDER BY log_date,log_time DESC");
+    //const emailSearch = ""
+    db.query("SELECT * FROM log WHERE LOCATE(?, log_email)!=0"+sqlLog_date+sqlStatusEmail+sqlStatusLogin+" ORDER BY log_date,log_time DESC" ,
+        dataSearch, (err, result) => {
             if (err) {
                 res.json({ status: 'error', message: err })
                 console.log(err);
             } else {
-                res.json({ status: 'ok',result })
+                res.json({ status: 'ok',result:result.slice((page-1)*20, page*20),length:result.length })
                 //res.send(result);
             }
         })

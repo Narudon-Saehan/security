@@ -42,7 +42,7 @@ const HomeScreen = () => {
             h = 0;
         }
         setDay(d)
-        setMessage(d + " วัน " + pad(h) + " ชั่วโมง " + pad(m) + " นาที " + s + " วินาที")
+        setMessage(d + " Day " + pad(h) + " Hr " + pad(m) + " Min " + s + " Sec")
         if (loading) {
             setLoading(false)
         }
@@ -74,19 +74,23 @@ const HomeScreen = () => {
     }
     return (
         <body>
-            <div className="bg-img">
-                <div className="HomeBox">
+            {/* <div className="bg-img"> */}
+                <div className="contentsHome">
                     <h1 >Home</h1>
-                    <h2>ยินดีต้อนรับ</h2>
+                    <h2>Welcome</h2>
                     <h2>Name: {dataUser?.firstName} {dataUser?.lastName}</h2>
                     <div className="HometextTime"> คุณใช้ PASSWORD นี้มาแล้วเป็นเวลา </div>
                         <div className="HomeTime">{message}</div>
                     <h2>{day >= 90 ? "คุณใช้passwordมา 90 วันแล้ว กรุณาเปลี่ยน password " : ""}</h2>
                     {/* <input class="Homebutton" type="submit" onClick={() => logout()} value="LOGOUT " /> */}
-                    <button type="button" class="btn btn-danger " onClick={() => logout()}  >LOG OUT</button>
-                    <button type="button" class="btn btn-primary" >GO TO LOGPAGE</button>
+                    {/* <div className="cen"> */}
+                    <div className="space">
+                        <button type="button" class="btn btn-danger btn-lg " onClick={() => logout()}  >LOG OUT</button>
+                    </div>
+                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"} >GO TO LOGPAGE</button>
+                    {/* </div> */}
                 </div>
-            </div>
+            {/* </div> */}
         </body>
     )
 }

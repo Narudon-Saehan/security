@@ -18,7 +18,7 @@ const ForgotPasswordScreen =()=>{
             confirmButtonText: "OK",
             background: '#FFF',
             backdrop: `
-              url("https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.15752-9/305760303_791134962198434_1681207144088323104_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=ae9488&_nc_ohc=03IFl9D5pqoAX_C1Mdf&_nc_ht=scontent.fbkk21-1.fna&oh=03_AVJOoUkHz8h4VP_JubDETAG4Hy8YT8bc2HE607QI7EtvNg&oe=63657131")
+              url("https://cdn.discordapp.com/attachments/1027483645130309696/1028045181796220948/unknown.png")
               left top
               
             `
@@ -33,7 +33,7 @@ const ForgotPasswordScreen =()=>{
             background: '#FFF',
             backdrop: `
               rgba(0,0,123,0.4)
-              url("https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.15752-9/305760303_791134962198434_1681207144088323104_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=ae9488&_nc_ohc=03IFl9D5pqoAX_C1Mdf&_nc_ht=scontent.fbkk21-1.fna&oh=03_AVJOoUkHz8h4VP_JubDETAG4Hy8YT8bc2HE607QI7EtvNg&oe=63657131")
+              url("https://cdn.discordapp.com/attachments/1027483645130309696/1028045181796220948/unknown.png")
               left top
               
             `
@@ -106,13 +106,17 @@ const ForgotPasswordScreen =()=>{
                 <div className="bg-img">
                 <div className="content">
                     <header>RECOVER PASSWORD</header>
-                        <text class="forgettext" style={{fontSize: "18px" , color:"white"}}>If you've lost your password or wish to reset it,use the link below to get started.</text>
+                        <text class="forgettext" style={{fontSize: "16px" , color:"white"}}>If you've lost your password or wish to reset it,use the link below to get started.</text>
                         
                         <div class="space">
                                 <button type="button" class="btn btn-primary btn-lg" value="Reset Your Password" onClick={()=>handleSubmit1()} >
                                 Reset Your Password
                                 </button>
-
+                        </div>
+                        <div class="space">
+                                <button type="button" class="btn btnttt btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
+                                Cancle
+                                </button>
                         </div>
                         <div class="space">
                         <text class="forgettext" style={{fontSize:"12px" ,color:"#FFE5D9"}}>If you did not request a password reset,you can safely ignore this email. Only a person with access to your email can reset your account password.</text>

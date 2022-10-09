@@ -70,7 +70,7 @@ const ResetPasswordScreen = () => {
                     <div class="field">
                         <span class="fa fa-user"></span>
                         <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} required/>
-                        <button type="button" onClick={() => showPassword("newpassword")}>show</button>
+                        <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("newpassword")}>show</button>
                         <br /><br />
                     </div>
                     <div class="pass">
@@ -80,14 +80,17 @@ const ResetPasswordScreen = () => {
                     <div class="field">
                         <span></span>
                         <input type="password" id="veritypassword" placeholder="Verity Password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required/>
-                        <button type="button" class="showbutton" onClick={() => showPassword("veritypassword")}>show</button>
+                        <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("veritypassword")}>show</button>
                         <br /><br />
                     </div>
                     {/* <div class="btn_submit">
                         <button class="btn btn-primary btn-lg" type="submit" value="Submit" />
                     </div> */}
                     <div className="space">
-                        <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+                        <button type="submit" class="btn btnRegister btn-primary btn-lg" value="Submit">Submit</button>
+                    </div>
+                    <div class="space">
+                        <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
                     </div>
                 </form>
             </div>

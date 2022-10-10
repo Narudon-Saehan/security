@@ -37,7 +37,6 @@ const LoginScreen = () => {
                 log_email: email,
 
             }).then((response) => {
-                console.log(response.data);
                 if (response.data.status === "ok") {
                     localStorage.setItem("tokenLogin", response.data.token)
                     window.location = '/home'
@@ -61,11 +60,9 @@ const LoginScreen = () => {
         return () => {
             axios.get("https://geolocation-db.com/json/0f761a30-fe14-11e9-b59f-e53803842572")
                 .then((res) => {
-                    //console.log(res.data);
                     setAddress(res.data)
                     setLoading(false)
                 }).catch((err) => {
-                    //console.log(err);
                     Swal.fire("unable to connect to https://geolocation-db.com please inform admin")
                     setLoading(false)
                 })

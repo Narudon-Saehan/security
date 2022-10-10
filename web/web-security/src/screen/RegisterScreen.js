@@ -85,7 +85,6 @@ const RegisterScreen = () => {
                 question: question,
                 answer: answer
             }).then((res) => {
-                // console.log(res.data.token);
                 setToken(res.data.token)
                 setSendEmail(res.data.token)
                 // let link = "http://localhost:3000/RegisterSucceedScreen/" + res.data.token

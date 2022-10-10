@@ -64,7 +64,6 @@ const HomeScreen = () => {
         return window.location = "/"
     }
     if (!statusPasswordTime) {
-        //console.log("test");
         //alert("คุณใช้ pasaword นี้มา 90 วันแล้วกรุณาเปลี่ยน password ใหม่")
         return window.location = "/resetPass"
     }

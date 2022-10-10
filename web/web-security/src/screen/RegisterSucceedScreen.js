@@ -32,7 +32,7 @@ const RegisterSucceedScreen = () => {
                         setLoading(false)
                     }
                 }).catch(() => {
-                    console.log("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
+                    Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
                 })
         }
     }
@@ -78,7 +78,6 @@ const RegisterSucceedScreen = () => {
                     token: token,
                 })
                     .then((res) => {
-                        console.log(res.data);
                         if (res.data.status === "error") {
                             Swal.fire({
                                 icon: 'error',
@@ -95,7 +94,7 @@ const RegisterSucceedScreen = () => {
                             setLoading(false)
                         }
                     }).catch(() => {
-                        console.log("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
+                        Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/register");
                     })
             }
         }

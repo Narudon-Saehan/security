@@ -91,7 +91,6 @@ const ResetPasswordScreen = () => {
                     setStatusReset(true)
                     //window.location = '/home'
                 }
-                console.log(response.data.status);
             }).catch(()=>{
                 Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/resetPassword")
                 setLoading(false)

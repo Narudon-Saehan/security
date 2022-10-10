@@ -83,7 +83,6 @@ const ForgotPasswordSucceedScreen = () => {
             password: password
         })
             .then((res) => {
-                console.log(res.data);
                 if (res.data.status === "duplicate") {
                     Swal.fire({
                         icon: 'error',
@@ -92,7 +91,6 @@ const ForgotPasswordSucceedScreen = () => {
                     })
                     setLoading(false)
                 } else if (res.data.status === "ok") {
-                    //console.log(res.data.result.affectedRows);
                     if (res.data.result.affectedRows >= 1) {
                         Swal.fire({
                             icon: 'success',

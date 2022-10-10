@@ -97,13 +97,11 @@ app.post("/addUser", (req, res) => {
                 res.json({ status: 'error', message: err })
                 return
             }
-            //console.log(hashPassword);
             let password_history = JSON.stringify([hashPassword])
             db.query("INSERT INTO users (email,password,firstName,lastName,question,answer,role,password_time,password_history) VALUES(?,?,?,?,?,?,?,CONVERT_TZ(?,'+00:00','+7:00'),?)",
                 [email, hashPassword, firstName, lastName, question, answer, "user", password_time, password_history], (err, result) => {
                     if (err) {
                         res.json({ status: 'error', message: err })
-                        console.log(err);
                     } else {
                         res.json({ status: 'ok' })
                         //res.send(result);
@@ -138,7 +136,6 @@ app.post("/login", (req, res) => {
                     [log_date, log_time, ipv4, country, latitude, longitude, log_email, status_email, status_login], (err, result) => {
                         if (err) {
                             res.json({ status: 'error', message: err })
-                            //console.log(err);
                         } else {
                             res.json({ status: 'error', message: "Wrong email or password" })
                         }
@@ -154,7 +151,6 @@ app.post("/login", (req, res) => {
                             [log_date, log_time, ipv4, country, latitude, longitude, log_email, status_email, status_login], (err, result) => {
                                 if (err) {
                                     res.json({ status: 'error', message: err })
-                                    //console.log(err);
                                 } else {
                                     res.json({ status: 'ok', message: "login success", token: token })
                                     //res.send(result);
@@ -166,7 +162,6 @@ app.post("/login", (req, res) => {
                             [log_date, log_time, ipv4, country, latitude, longitude, log_email, status_email, status_login], (err, result) => {
                                 if (err) {
                                     res.json({ status: 'error', message: err })
-                                    //console.log(err);
                                 } else {
                                     res.json({ status: 'error', message: "Wrong email or password" })
                                     //res.send(result);
@@ -396,7 +391,6 @@ app.post("/resetPassword2", (req, res) => {
             }
         })
 })
-
 //////////////////////////////////////LOG////////////////////////////////////////////////////
 app.post('/addLog', (req, res) => {
     const log_datetime = new Date().toISOString()
@@ -426,7 +420,6 @@ app.post('/testAddLog', (req, res) => {
         [date], (err, resultLog) => {
             if (err) {
                 res.json({ status: 'error', message: err })
-                console.log(err);
             } else {
                 if (resultLog.length === 0) {
                     db.query("INSERT INTO test (date,data_log) VALUES(?,?)",
@@ -437,7 +430,6 @@ app.post('/testAddLog', (req, res) => {
                                 res.json({ status: 'ok', result: JSON.parse("[" + data_log + "]") })
                             }
                         })
-                    console.log("not found");
                 } else {
                     let dataLogTemp = JSON.parse(resultLog[0].data_log)
                     let data_logTemp = JSON.parse(data_log)
@@ -452,7 +444,6 @@ app.post('/testAddLog', (req, res) => {
                                 res.json({ status: 'ok', result: JSON.parse(strDataLogTemp) })
                             }
                         })
-                    console.log("found");
                 }
             }
         })
@@ -464,7 +455,6 @@ app.post('/getLog', (req, res) => {
     const statusEmail = req.body.statusEmail === "all" ? "all" : req.body.statusEmail === "yes" ? true : false
     const statusLogin = req.body.statusLogin === "all" ? "all" : req.body.statusLogin === "yes" ? true : false
     const page = req.body.page
-    console.log(page);
 
     let sqlLog_date = ""
     let sqlStatusEmail = ""
@@ -490,7 +480,6 @@ app.post('/getLog', (req, res) => {
         dataSearch, (err, result) => {
             if (err) {
                 res.json({ status: 'error', message: err })
-                console.log(err);
             } else {
                 res.json({ status: 'ok', result: result.slice((page - 1) * 20, page * 20), length: result.length })
                 //res.send(result);

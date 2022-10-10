@@ -81,19 +81,19 @@ const HomeScreen = () => {
                     <div className="HometextTime"> You have been using this password  </div>
                         <div className="HomeTime">{message}</div>
                     <h2>{day >= 90 ? "คุณใช้passwordมา 90 วันแล้ว กรุณาเปลี่ยน password " : ""}</h2>
-                    {/* <input class="Homebutton" type="submit" onClick={() => logout()} value="LOGOUT " /> */}
+                    {/* <input className="Homebutton" type="submit" onClick={() => logout()} value="LOGOUT " /> */}
                     {/* <div className="cen"> */}
                     <div className="space">
-                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"} >GO TO LOGPAGE</button>
+                        <button type="button" className="btn btn-primary btn-lg" onClick={()=>window.location = "/Log/"+new Date(new Date().getTime() - (new Date().getTimezoneOffset()*60*1000)).toISOString().split('T')[0]+"/null/all/all/1"} >GO TO LOGPAGE</button>
                     </div>
                     <div className="space">
-                        <button type="button" class="btn btn-primary btn-lg" onClick={()=>window.location = "/resetPass"} >RESET PASSWORD</button>
+                        <button type="button" className="btn btn-primary btn-lg" onClick={()=>window.location = "/resetPass"} >RESET PASSWORD</button>
                     </div>
                     <div className="space">
-                        <button type="button" class="btn btn-danger btn-lg" onClick={()=>window.location = "/dontClick"}><FiAlertTriangle size={50}/>DON'T CLICK</button>
+                        <button type="button" className="btn btn-danger btn-lg" onClick={()=>window.location = "/dontClick"}><FiAlertTriangle size={50}/>DON'T CLICK</button>
                     </div>
                     <div className="space">
-                        <button type="button" class="btn btn-danger btn-lg " onClick={() => logout()}  >LOG OUT</button>
+                        <button type="button" className="btn btn-danger btn-lg " onClick={() => logout()}  >LOG OUT</button>
                     </div>
                     {/* </div> */}
                 </div>

@@ -126,7 +126,7 @@ const RegisterSucceedScreen = () => {
             <div className="bg-img">
                 <div className="content">
                     <header>Register Succeed</header>
-                    <button type="button" onClick={()=> window.location = '/'} class="btn btn-primary btn-lg" value="go to Login">go to Login</button>
+                    <button type="button" onClick={()=> window.location = '/'} className="btn btn-primary btn-lg" value="go to Login">go to Login</button>
                 </div>
             </div>
         </body>

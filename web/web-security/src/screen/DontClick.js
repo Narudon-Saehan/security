@@ -9,7 +9,11 @@ const DontClick = () => {
         return window.location = "/resetPass"
     }
     return(
-        <body class="loads">
+        <body className="loads" style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+            
+            <div style={{backgroundColor:"red"}}>
+                <img src="https://cdn.discordapp.com/attachments/899954875851501579/1028696554539864064/nut.gif" style={{height:"100%",width:"100%"}}/>
+            </div>
 
         </body>
         )

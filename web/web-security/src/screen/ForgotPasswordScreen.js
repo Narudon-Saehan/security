@@ -77,20 +77,20 @@ const ForgotPasswordScreen = () => {
             <div className="bg-img">
                 <div className="content">
                     <header>RECOVER PASSWORD</header>
-                    <text class="forgettext" style={{ fontSize: "16px", color: "white" }}>If you've lost your password or wish to reset it,use the link below to get started.</text>
+                    <text className="forgettext" style={{ fontSize: "16px", color: "white" }}>If you've lost your password or wish to reset it,use the link below to get started.</text>
 
-                    <div class="space">
-                        <button type="button" class="btn btn-primary btn-lg" value="Reset Your Password" onClick={() => handleSubmit1()} >
+                    <div className="space">
+                        <button type="button" className="btn btn-primary btn-lg" value="Reset Your Password" onClick={() => handleSubmit1()} >
                             Reset Your Password
                         </button>
                     </div>
-                    <div class="space">
-                        <button type="button" class="btn btnttt btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
+                    <div className="space">
+                        <button type="button" className="btn btnttt btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
                             Cancle
                         </button>
                     </div>
-                    <div class="space">
-                        <text class="forgettext" style={{ fontSize: "12px", color: "#FFE5D9" }}>If you did not request a password reset,you can safely ignore this email. Only a person with access to your email can reset your account password.</text>
+                    <div className="space">
+                        <text className="forgettext" style={{ fontSize: "12px", color: "#FFE5D9" }}>If you did not request a password reset,you can safely ignore this email. Only a person with access to your email can reset your account password.</text>
                     </div>
                 </div>
             </div>

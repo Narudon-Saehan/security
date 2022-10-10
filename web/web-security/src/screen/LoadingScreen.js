@@ -4,7 +4,7 @@ const LoadingScreen = () => {
 
 
     return (
-        <div class="ring">Loading
+        <div className="ring">Loading
             <spansss></spansss>
         </div>
 

@@ -184,16 +184,16 @@ const ForgotPasswordSucceedScreen = () => {
                 <div className="bg-img">
                     <div className="content">
                         <header>Question : </header>
-                        <div class="pass">
+                        <div className="pass">
                             <label>{dataFormToken.question}</label>
                         </div>
                         <form onSubmit={checkAnswer}>
-                            <div class="field">
-                                <span class="fa fa-user"></span>
+                            <div className="field">
+                                <span className="fa fa-user"></span>
                                 <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required /><br /><br />
                             </div>
                             <div className="space">
-                                <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
+                                <button type="submit" className="btn btn-primary btn-lg" value="Submit">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -209,7 +209,7 @@ const ForgotPasswordSucceedScreen = () => {
                     <div className="content">
                         <header>Reset Password Succeed</header>
                             <div className="space">
-                                <button type="button" class="btn btn-primary btn-lg" value="Submit" onClick={()=>window.location = "/"}>GO LOGIN</button>
+                                <button type="button" className="btn btn-primary btn-lg" value="Submit" onClick={()=>window.location = "/"}>GO LOGIN</button>
                             </div>
                     </div>
                 </div>
@@ -220,7 +220,7 @@ const ForgotPasswordSucceedScreen = () => {
     return (
         <body>
             {!statusPassword && (password !== "") ?
-                <div class="alert alert-danger" style={{ width: "30%", left: "70%" }}>
+                <div className="alert alert-danger" style={{ width: "30%", left: "70%" }}>
                     <strong>Warning!</strong>
                     <label>Passwords must be at least 8 characters in length</label>
                     <label>a minimum of 1 lower case letter [a-z]</label>
@@ -233,26 +233,26 @@ const ForgotPasswordSucceedScreen = () => {
                 <div className="content">
                     <header>Reset Password</header>
                     <form onSubmit={submitChangePassword}>
-                        <div class="pass">
+                        <div className="pass">
                             <label >New Password:</label>
                             &ensp;
                             <label style={{ color: statusPassword ? "#00FFAB" : "#FF1100" }}>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                         </div>
-                        <div class="field">
-                            <span class="fa fa-user"></span>
+                        <div className="field">
+                            <span className="fa fa-user"></span>
                             <input type={showPassword?"text":"password"} value={password} onChange={(e) => checkPassword(e.target.value)} required />
-                            <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
+                            <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} className="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
                         </div>
-                        <div class="pass">
+                        <div className="pass">
                             <label>Confirm Password:</label>
                             &ensp;
                             <label style={{ color: (password === repeatPassword) ? "#00FFAB" : "#FF1100" }}>{repeatPassword === "" ? "" : (password === repeatPassword) ? "the same" : "not the same"}</label>
                         </div>
-                        <div class="field">
-                            <span class="fa fa-user"></span>
+                        <div className="field">
+                            <span className="fa fa-user"></span>
                             <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required />
                         </div>
-                        <div class="field space">
+                        <div className="field space">
                             <input type="submit" value="Reset" />
                         </div>
                     </form>

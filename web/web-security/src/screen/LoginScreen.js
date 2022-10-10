@@ -85,14 +85,14 @@ const LoginScreen = () => {
                     <h6 style={{ color: "white" }}>{`latitude :${address?.latitude} longitude :${address?.longitude}`} </h6> */}
                     <header>LOGIN</header>
                     <form onSubmit={handleSubmit}>
-                        <div class="field">
+                        <div className="field">
                             <span><FaUserCircle /></span>
                             <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="Email" />
                         </div>
-                        <div class="field space">
+                        <div className="field space">
                             <span><HiKey /></span>
-                            <input type="password" class="pass-key" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
-                            {/* <span class="show">SHOW</span> */}
+                            <input type="password" className="pass-key" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Password" />
+                            {/* <span className="show">SHOW</span> */}
                         </div>
                         <br/>
                         <ReCAPTCHA
@@ -100,18 +100,18 @@ const LoginScreen = () => {
                             onChange={() => handleOnChange()}
                         />
 
-                        <div class="pass">
+                        <div className="pass">
                             <a href="/forgotPass">Forgot Password ?</a>
                         </div>
 
 
-                        <div class="field">
+                        <div className="field">
                             <input type="submit" value="LOGIN" />
                             {/* disabled={!Verifield?"disabled":""} */}
                         </div>
 
                     </form>
-                    <div class="signup space">
+                    <div className="signup space">
                         Don't have account?
                         <a href="/register">Sign up here.</a>
                     </div>

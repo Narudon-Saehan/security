@@ -165,21 +165,21 @@ const RegisterScreen = () => {
             <div className="bg-img">
                 <div className="content">
                     <header>Check your email index</header>
-                    <p class="forgettext" style={{ fontSize: "16px", color: "white" }}>We sent an email link to complete your registrationt.</p>
+                    <p className="forgettext" style={{ fontSize: "16px", color: "white" }}>We sent an email link to complete your registrationt.</p>
 
 
-                    <div class="space">
-                        <button type="button" class="btn btnRegister btn-primary btn-lg" value="Resend Email" onClick={()=>setSendEmail(token)} >
+                    <div className="space">
+                        <button type="button" className="btn btnRegister btn-primary btn-lg" value="Resend Email" onClick={()=>setSendEmail(token)} >
                             Resend Email
                         </button>
                     </div>
 
-                    <div class="space">
-                        <p class="forgettext" style={{ fontSize: "12px", color: "#FFE5D9" }}>Tip: Check your spam folder in case the email was incorrectly identified</p>
+                    <div className="space">
+                        <p className="forgettext" style={{ fontSize: "12px", color: "#FFE5D9" }}>Tip: Check your spam folder in case the email was incorrectly identified</p>
                     </div>
 
-                    <div class="space">
-                        <button type="button" class="btn btnRegister btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
+                    <div className="space">
+                        <button type="button" className="btn btnRegister btn-danger btn-lg" value="Reset Your Password" onClick={() => window.location = '/'} >
                             Go to login
                         </button>
                     </div>
@@ -193,7 +193,7 @@ const RegisterScreen = () => {
         <body>
             <div className="bg-img">
                 {!statusPassword && (password !== "")?
-                    <div class="alert alert-danger" style={{width:"30%",left:"70%"}}>
+                    <div className="alert alert-danger" style={{width:"30%",left:"70%"}}>
                         <strong>Warning!</strong>
                         <label>Passwords must be at least 8 characters in length</label>
                         <label>a minimum of 1 lower case letter [a-z]</label>
@@ -205,67 +205,67 @@ const RegisterScreen = () => {
                 <div className="content">
                     <header>Register</header>
                     <form onSubmit={handleSubmit}>
-                        <div class="pass de">
-                            <label for="email" class="form-label">Email:</label>
+                        <div className="pass de">
+                            <label for="email" className="form-label">Email:</label>
                             &ensp;&ensp;
                             <label style={{ color: statusEmail ? "#00FFAB" : "#FF1100" }}>{(email === "") ? "" : statusEmail ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
                         </div>
-                        <div class="fields ">
-                            <span class="fa fa-user"></span>
+                        <div className="fields ">
+                            <span className="fa fa-user"></span>
                             <input type="email" value={email} onChange={(e) => changeUserName(e.target.value)} placeholder="Email" required />
                         </div>
                         <div className="space">
-                            <div class="pass de ">
+                            <div className="pass de ">
                                 <label>Password : </label>
                                 &ensp;&ensp;
                                 <label style={{ color: statusPassword ? "#00FFAB" : "#FF1100" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                                 
                             </div>
-                            <div class="fields">
+                            <div className="fields">
                                 <span></span>
                                 <input type={showPassword?"text":"password"} value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required/>
-                                <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
+                                <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} className="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
                             </div>
                         </div>
                         <div className="space">
-                            <div class="pass de">
+                            <div className="pass de">
                                 <label>Confirm Password : </label>
                                 &ensp;&ensp;
                                 <label style={{ color: (password === repeatPassword) ? "#00FFAB" : "#FF1100" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Match" : "Not match"}</label>
                             </div>
-                            <div class="fields">
+                            <div className="fields">
                                 <span></span>
                                 <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} placeholder="Password" required />
                             </div>
                         </div>
                         <div className="space">
-                            <div class="pass de">
+                            <div className="pass de">
                                 <label>First Name : </label>
                                 &ensp;&ensp;
                             </div>
-                            <div class="fields ">
+                            <div className="fields ">
                                 <span></span>
                                 <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" required/><br /><br />
 
                             </div>
                         </div>
                         <div className="space">
-                            <div class="pass de">
+                            <div className="pass de">
                                 <label>Last Name : </label>
                                 &ensp;&ensp;
                             </div>
-                            <div class="fields">
+                            <div className="fields">
                                 <span></span>
                                 <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" required/><br /><br />
                             </div>
                         </div>
                         <div className="space">
-                            <div class="pass de">
+                            <div className="pass de">
                                 <label>Question : </label>
                                 &ensp;&ensp;
                             </div>
                             <div style={{}}>
-                                <select class="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} style={{ height: "2.9em" }} required>
+                                <select className="form-select form-select-lg mb-3" value={question} onChange={(e) => setQuestion(e.target.value)} style={{ height: "2.9em" }} required>
                                     <option value="">Please select a question</option>
                                     <option value="what's your favorite food">what's your favorite food</option>
                                     <option value="What was your first pet's name?">What was your first pet's name?</option>
@@ -274,7 +274,7 @@ const RegisterScreen = () => {
                                 </select>
                             </div>
                         </div>
-                        <div class="pass de">
+                        <div className="pass de">
                             <label>Answer : </label>
                             &ensp;&ensp;
                         </div>
@@ -283,12 +283,12 @@ const RegisterScreen = () => {
                             <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required/>
                             <br /><br />
                         </div>
-                        <div class="space">
-                            <button type="submit" class="btn btnRegister btn-primary btn-lg" value="Submit">Submit</button>
+                        <div className="space">
+                            <button type="submit" className="btn btnRegister btn-primary btn-lg" value="Submit">Submit</button>
                         </div>
                     </form>
-                    <div class="space">
-                        <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
+                    <div className="space">
+                        <button type="button" onClick={() => window.location = '/'} className="btn btnRegister btn-danger btn-lg" value="go to Login">Cancle</button>
                     </div>
                 </div>
             </div>

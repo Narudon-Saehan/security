@@ -5,10 +5,10 @@ import { AuthContext } from "../auth/Auth";
 import LoadingScreen from "./LoadingScreen";
 import ErrorScreen from "./ErrorScreen";
 import './LogScreen.css';
+import  moment  from "moment";
 
 const LogScreen = () => {
     const params = useParams()
-    var moment = require('moment');
     const { checkLogout ,statusPasswordTime} = useContext(AuthContext);
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
@@ -23,10 +23,6 @@ const LogScreen = () => {
     const page = params.page
 
     const submitSearch = () => {
-        console.log(dataSearch);
-        // console.log(emailSearch);
-        // console.log(statusEmailSearch);
-        // console.log(statusLoginSearch);
         window.location = "/Log/" + (dataSearch ? dataSearch : "all") + "/" + (emailSearch ? emailSearch : "null") + "/" + statusEmailSearch + "/" + statusLoginSearch + "/1"
     }
     const StatusEmailSearchNo = () => {
@@ -65,7 +61,8 @@ const LogScreen = () => {
             }
 
         }
-    }, [])
+    })
+
     if (checkLogout) {
         return window.location = "/home"
     }
@@ -80,7 +77,7 @@ const LogScreen = () => {
     }
     return (
         <div>
-            <button type="button" class="btn btn-secondary" onClick={()=>window.location="/home"}>GO TO HOME</button>
+            <button type="button" className="btn btn-primary" style={{marginTop:"10px"}} onClick={()=>window.location="/home"}>GO TO HOME</button>
             <div className="input-group mt-3">
                 <span className="input-group-text">Search</span>
                 <span className="input-group-text" >Date</span>
@@ -129,8 +126,7 @@ const LogScreen = () => {
                             </tr>
                         </thead>
                         <tbody >
-                            {dataLog.data.map((data, index) => {
-                                if (index < 20) {
+                            {dataLog?.data?.map((data, index) => {
                                     return (
                                         <tr key={index}>
                                             <th scope="row">{((page - 1) * 20) + index + 1}</th>
@@ -145,27 +141,26 @@ const LogScreen = () => {
                                             <td style={{ color: data.status_login ? "green" : "red" }}>{data.status_login ? "login succeed" : "login failed"}</td>
                                         </tr>
                                     )
-                                }
                             })}
                         </tbody>
                     </table>}
                 <div className="spacer">
-                    <button type="button" class="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) - 1).toString()} disabled={page <= 1}>Prev</button>
+                    <button type="button" className="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) - 1).toString()} disabled={page <= 1}>Prev</button>
                     {dataPage.data.map((data) => {
                         if(data.toString()===page){
                             return (
-                                <button type="button"  class="btn btnlogs btn-outline-info" disabled>{data}</button>
+                                <button type="button"  className="btn btnlogs btn-outline-info" disabled>{data}</button>
                             )
                         }else{
                             return (
-                                <button type="button" class="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + data.toString()} >{data}</button>
+                                <button type="button" className="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + data.toString()} >{data}</button>
                             )
                         }
                         
                     })}
-                    <button type="button" class="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) + 1).toString()} disabled={page * 20 >= dataLength}>next</button>
+                    <button type="button" className="btn btnlog btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) + 1).toString()} disabled={page * 20 >= dataLength}>next</button>
                 </div>
-                {/*<button type="button" class="btn btnlogs btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) + 1).toString()} disabled={page * 20 >= dataLength}>next</button> */}
+                {/*<button type="button" className="btn btnlogs btn-outline-info" onClick={() => window.location = "/Log/" + params.date + "/" + params.email + "/" + params.statusEmail + "/" + params.statusLogin + "/" + (parseInt(params.page) + 1).toString()} disabled={page * 20 >= dataLength}>next</button> */}
             </div>
         </div>
     )

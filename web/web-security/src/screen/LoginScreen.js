@@ -1,13 +1,12 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect} from "react";
 import axios from "axios";
-import { Navigate, Link } from "react-router-dom";
 import { AuthContext } from "../auth/Auth";
 import LoadingScreen from "./LoadingScreen";
 import './LoginScreen.css'
 import ReCAPTCHA from "react-google-recaptcha";
 import { FaUserCircle } from 'react-icons/fa';
 import { HiKey } from 'react-icons/hi';
-
+import Swal from 'sweetalert2'
 const LoginScreen = () => {
     const { checkLogout } = useContext(AuthContext);
     const [email, setEmail] = useState("")
@@ -16,7 +15,6 @@ const LoginScreen = () => {
     const [address, setAddress] = useState(null)
     //const [test,setTest] = useState(false)
     const [Verifield, setVerifield] = useState(false)
-    const Swal = require('sweetalert2')
 
     const handleOnChange = (value) => {
         setVerifield(true)

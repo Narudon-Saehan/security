@@ -4,6 +4,7 @@ import validator from 'validator'
 import axios from "axios"
 import LoadingScreen from "./LoadingScreen"
 import ErrorScreen from "./ErrorScreen"
+import {FaRegEye,FaRegEyeSlash} from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import './RegisterScreen.css'
 const ForgotPasswordSucceedScreen = () => {
@@ -15,7 +16,7 @@ const ForgotPasswordSucceedScreen = () => {
     const [answer, setAnswer] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
-    const [messagePassword, setMessagePassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const [statusPassword, setStatusPassword] = useState(undefined)
     const [rePasswordSucceed, setRePasswordSucceed] = useState(false)
 
@@ -134,10 +135,8 @@ const ForgotPasswordSucceedScreen = () => {
             minUppercase: 1, minNumbers: 1, minSymbols: 1
         })) {
             setStatusPassword(true)
-            setMessagePassword(false)
         } else {
             setStatusPassword(false)
-            setMessagePassword(true)
         }
     }
     const submitChangePassword = (e) => {
@@ -173,7 +172,7 @@ const ForgotPasswordSucceedScreen = () => {
         return () => {
             checkToken()
         }
-    }, []);
+    });
     if (loading) {
         return <LoadingScreen />
     }
@@ -243,7 +242,8 @@ const ForgotPasswordSucceedScreen = () => {
                         </div>
                         <div class="field">
                             <span class="fa fa-user"></span>
-                            <input type="password" value={password} onChange={(e) => checkPassword(e.target.value)} required />
+                            <input type={showPassword?"text":"password"} value={password} onChange={(e) => checkPassword(e.target.value)} required />
+                            <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
                         </div>
                         <div class="pass">
                             <label>Confirm Password:</label>

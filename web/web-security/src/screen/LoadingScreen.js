@@ -1,15 +1,13 @@
 import './LoadingScreen.css'
-import React from 'react'; 
-import { render } from 'react-dom';
-import $ from 'jquery'; 
-
-const LoadingScreen=()=>{
+import React from 'react';
+const LoadingScreen = () => {
 
 
-    return(
-        <body class="loads">
-        </body>
-        
-        )
+    return (
+        <div class="ring">Loading
+            <spansss></spansss>
+        </div>
+
+    )
 }
 export default LoadingScreen;

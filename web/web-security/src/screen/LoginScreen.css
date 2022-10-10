@@ -12,10 +12,10 @@ body{
   background-position: center;
 }
 .loads{
-  /* background: url('https://im5.ezgif.com/tmp/ezgif-5-b2e6708e45.gif'); */
-  background: url('https://media3.giphy.com/media/lp3GUtG2waC88/giphy.gif'); 
+  background: url('https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.15752-9/308517438_1119740165345846_5283424892737341224_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=ae9488&_nc_ohc=FIYZntHGg0kAX8Wx6Gd&_nc_ht=scontent.fbkk21-1.fna&oh=03_AVKUqRf6vE5d57tZSpQwUeONU1uliLf1YqOFVpUWxVVwOA&oe=63690C08');
+  /* background: url('https://media3.giphy.com/media/lp3GUtG2waC88/giphy.gif');  */
   height: 100vh;
-  /*background-size: cover;*/
+  /* background-size: cover; */
   background-position: center;
 }
 .body:after{

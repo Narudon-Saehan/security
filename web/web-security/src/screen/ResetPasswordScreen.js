@@ -4,6 +4,7 @@ import axios from "axios"
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen"
 import Swal from 'sweetalert2'
+import {FaRegEye,FaRegEyeSlash} from 'react-icons/fa'
 import './LoginScreen.css'
 import './RegisterScreen.css'
 const ResetPasswordScreen = () => {
@@ -11,9 +12,10 @@ const ResetPasswordScreen = () => {
     //const params = useParams()
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false)
     const [statusPassword, setStatusPassword] = useState(undefined)
-    const [messagePassword, setMessagePassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [statusReset, setStatusReset] = useState(false)
 
     const checkPassword = (value) => {
         setPassword(value)
@@ -26,14 +28,14 @@ const ResetPasswordScreen = () => {
             setStatusPassword(false)
         }
     }
-    const showPassword=(idName)=> {
-        var x = document.getElementById(idName);
-        if (x.type === "password") {
-            x.type = "text";
-        } else {
-            x.type = "password";
-        }
-    }
+    // const showPassword=(idName)=> {
+    //     var x = document.getElementById(idName);
+    //     if (x.type === "password") {
+    //         x.type = "text";
+    //     } else {
+    //         x.type = "password";
+    //     }
+    // }
 
     const rePassword = (e)=>{
         e.preventDefault();
@@ -67,21 +69,27 @@ const ResetPasswordScreen = () => {
                     })
                     setLoading(false)
                 }else if(response.data.status === "ok"){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Reset password succuss',
-                            text: "Go to home",
-                        })
-                        setLoading(false)
+                        // Swal.fire({
+                        //     icon: 'success',
+                        //     title: 'Reset password succuss',
+                        //     text: "Go to home",
+                        // })
+                        // setLoading(false)
 
-                    // localStorage.setItem("tokenLogin", response.data.token)
-                    // Swal.fire({
-                    //     icon: 'success',
-                    //     title: 'Reset password succuss',
-                    //     text: "Go to home",
-                    // })
-                    // setLoading(false)
-                    // window.location = '/home'
+                    localStorage.setItem("tokenLogin", response.data.token)
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Reset password succuss',
+                        text: "Go to home",
+                        confirmButtonText: "OK",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location = '/'
+                        } 
+                    })
+                    setLoading(false)
+                    setStatusReset(true)
+                    //window.location = '/home'
                 }
                 console.log(response.data.status);
             }).catch(()=>{
@@ -102,10 +110,23 @@ const ResetPasswordScreen = () => {
     if(loading){
         return <LoadingScreen/>
     }
+    if(statusReset){
+        return(
+            <div className="bg-img">
+
+            <div className="content">
+                <header>Reset Password Succeed</header>
+                <div class="space">
+                    <button type="button" onClick={() => window.location = '/'} class="btn btnRegister btn-primary btn-lg" value="go to Login">go to Login</button>
+                </div>
+            </div>
+        </div>
+        )
+    }
     return (
         <div className="bg-img">
-            {messagePassword?
-                    <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
+            {!statusPassword && (password !== "")?
+                    <div class="alert alert-danger" style={{width:"30%",left:"70%"}}>
                         <strong>Warning!</strong>
                         <label>Passwords must be at least 8 characters in length</label>
                         <label>a minimum of 1 lower case letter [a-z]</label>
@@ -124,8 +145,8 @@ const ResetPasswordScreen = () => {
                     </div>
                     <div class="field">
                         <span class="fa fa-user"></span>
-                        <input type="password" id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)} onFocus={()=>setMessagePassword(true)} onBlur={()=>setMessagePassword(false)} required/>
-                        <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => showPassword("newpassword")}>show</button>
+                        <input type={showPassword?"text":"password"} id="newpassword" placeholder="New Password" value={password} onChange={(e) => checkPassword(e.target.value)}  required/>
+                        <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
                         <br /><br />
                     </div>
                     <div class="pass">

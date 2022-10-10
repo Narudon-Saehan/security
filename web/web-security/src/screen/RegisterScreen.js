@@ -1,10 +1,10 @@
 import { useState,useContext } from "react";
 import axios from "axios";
-import emailjs from '@emailjs/browser';
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
 import { AuthContext } from "../auth/Auth"
 import { sendEmail } from "../sendEmail/sendEmail";
+import {FaRegEye,FaRegEyeSlash} from 'react-icons/fa'
 import Swal from 'sweetalert2'
 import './LoginScreen.css';
 import './RegisterScreen.css'
@@ -20,9 +20,9 @@ const RegisterScreen = () => {
     const [answer, setAnswer] = useState("")
     const [statusEmail, setStatusEmail] = useState(undefined)
     const [statusPassword, setStatusPassword] = useState(undefined)
-    const [messagePassword, setMessagePassword] = useState(false)
     const [register, setRegister] = useState(false)
     const [token, setToken] = useState()
+    const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
 
     const sendEmailSucceed = ()=>{
@@ -194,7 +194,7 @@ const RegisterScreen = () => {
         <body>
             <div className="bg-img">
                 {!statusPassword && (password !== "")?
-                    <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
+                    <div class="alert alert-danger" style={{width:"30%",left:"70%"}}>
                         <strong>Warning!</strong>
                         <label>Passwords must be at least 8 characters in length</label>
                         <label>a minimum of 1 lower case letter [a-z]</label>
@@ -224,7 +224,8 @@ const RegisterScreen = () => {
                             </div>
                             <div class="fields">
                                 <span></span>
-                                <input type="password" value={password} onFocus={()=>setMessagePassword(true)} onBlur={()=>setMessagePassword(false)} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required/>
+                                <input type={showPassword?"text":"password"} value={password} onChange={(e) => changePassword(e.target.value)} placeholder="Password" required/>
+                                <button type="button" style={{border:'transparent',backgroundColor:'transparent',fontSize:'12px',marginRight:'10px',color:'grey'}} class="showbutton" onClick={() => setShowPassword(!showPassword)}>{showPassword?<FaRegEye size={20}/>:<FaRegEyeSlash size={20}/>}</button>
                             </div>
                         </div>
                         <div className="space">

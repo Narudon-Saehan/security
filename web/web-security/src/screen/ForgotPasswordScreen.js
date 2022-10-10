@@ -3,12 +3,12 @@ import axios from "axios";
 import { AuthContext } from "../auth/Auth"
 import { sendEmail } from "../sendEmail/sendEmail";
 import LoadingScreen from "./LoadingScreen";
+import Swal from "sweetalert2";
 import './ForgotPasswordScreen.css'
 
 const ForgotPasswordScreen = () => {
     const { checkLogout} = useContext(AuthContext)
     const [loading, setLoading] = useState(false)
-    const Swal = require('sweetalert2')
     const showAlerts = () => {
         Swal.fire({
             title: "Success",
@@ -16,30 +16,9 @@ const ForgotPasswordScreen = () => {
             icon: "success",
             confirmButtonText: "OK",
             background: '#FFF',
-            backdrop: `
-            url("https://cdn.discordapp.com/attachments/1027483645130309696/1028045181796220948/unknown.png")
-            left top
-            `
-        })
-    }
-    const showAlertf = () => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-            confirmButtonText: "OK",
-            background: '#FFF',
-            backdrop: `
-            rgba(0,0,123,0.4)
-            url("https://cdn.discordapp.com/attachments/1027483645130309696/1028045181796220948/unknown.png")
-            left top
-            `
         })
     }
     const succeed = () => {
-        //alert("ระบบส่ง Email ไปให้คุณแล้ว")
-        //setEmail("")
-        //setLoading(false)
         showAlerts();
         setLoading(false)
     }
@@ -52,7 +31,6 @@ const ForgotPasswordScreen = () => {
         setLoading(false)
     }
     const handleSubmit = (email) => {
-        //e.preventDefault();
         setLoading(true)
         if (email) {
             axios.post("http://localhost:5000/forgotPassword/checkEmail", {
@@ -69,13 +47,11 @@ const ForgotPasswordScreen = () => {
                     Swal.fire(response.data.message)
                     setLoading(false)
                 }
-                console.log(response.data);
             }).catch(() => {
                 alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/forgotPassword/checkEmail")
                 setLoading(false)
             })
         } else {
-            //alert("กรุณากรอก email")
             setLoading(false)
         }
 

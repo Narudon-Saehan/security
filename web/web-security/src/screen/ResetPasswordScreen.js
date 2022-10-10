@@ -3,6 +3,7 @@ import { AuthContext } from "../auth/Auth"
 import axios from "axios"
 import validator from 'validator'
 import LoadingScreen from "./LoadingScreen"
+import Swal from 'sweetalert2'
 import './LoginScreen.css'
 import './RegisterScreen.css'
 const ResetPasswordScreen = () => {
@@ -13,7 +14,6 @@ const ResetPasswordScreen = () => {
     const [statusPassword, setStatusPassword] = useState(undefined)
     const [messagePassword, setMessagePassword] = useState(false)
     const [loading, setLoading] = useState(false)
-    const Swal = require('sweetalert2')
 
     const checkPassword = (value) => {
         setPassword(value)
@@ -55,7 +55,7 @@ const ResetPasswordScreen = () => {
             return
         }
         setLoading(true)
-        axios.post("http://localhost:5000/resetPassword",{
+        axios.post("http://localhost:5000/resetPassword2",{
                 id:dataUser.id,
                 password:password
             }).then((response)=>{
@@ -63,18 +63,25 @@ const ResetPasswordScreen = () => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Reset password fail',
-                        text: "Do not use the old password",
+                        text: "You have already used this password, please change it.",
                     })
                     setLoading(false)
                 }else if(response.data.status === "ok"){
-                    localStorage.setItem("tokenLogin", response.data.token)
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Reset password succuss',
-                        text: "Go to home",
-                    })
-                    setLoading(false)
-                    window.location = '/home'
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reset password succuss',
+                            text: "Go to home",
+                        })
+                        setLoading(false)
+
+                    // localStorage.setItem("tokenLogin", response.data.token)
+                    // Swal.fire({
+                    //     icon: 'success',
+                    //     title: 'Reset password succuss',
+                    //     text: "Go to home",
+                    // })
+                    // setLoading(false)
+                    // window.location = '/home'
                 }
                 console.log(response.data.status);
             }).catch(()=>{
@@ -113,7 +120,7 @@ const ResetPasswordScreen = () => {
                 <form onSubmit={rePassword}>
                     <div class="pass">
                         <label>New Password:</label>
-                        <label style={{ color: statusPassword ? "green" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                        <label style={{ color: statusPassword ?  "#00FFAB" : "#FF1100" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                     </div>
                     <div class="field">
                         <span class="fa fa-user"></span>
@@ -123,7 +130,7 @@ const ResetPasswordScreen = () => {
                     </div>
                     <div class="pass">
                         <label>Verity Password:</label>
-                        <label style={{ color: (password === repeatPassword) ? "green" : "red" }} >{repeatPassword===""?"":(password === repeatPassword)? "the same" : "not the same"}</label>
+                        <label style={{ color: (password === repeatPassword) ?  "#00FFAB" : "#FF1100" }} >{repeatPassword===""?"":(password === repeatPassword)? "the same" : "not the same"}</label>
                     </div>
                     <div class="field">
                         <span></span>

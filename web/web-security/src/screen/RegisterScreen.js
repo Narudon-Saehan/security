@@ -5,6 +5,7 @@ import validator from 'validator'
 import LoadingScreen from "./LoadingScreen";
 import { AuthContext } from "../auth/Auth"
 import { sendEmail } from "../sendEmail/sendEmail";
+import Swal from 'sweetalert2'
 import './LoginScreen.css';
 import './RegisterScreen.css'
 
@@ -23,13 +24,12 @@ const RegisterScreen = () => {
     const [register, setRegister] = useState(false)
     const [token, setToken] = useState()
     const [loading, setLoading] = useState(false)
-    const Swal = require('sweetalert2')
 
     const sendEmailSucceed = ()=>{
         Swal.fire({
             icon: 'success',
             title: 'Check your email index',
-            text: "We sent an email link to complete your registrationt ",
+            text: `We sent an email link to complete your registrationt \n(${email})`
         })
         setRegister(true)
         setLoading(false)
@@ -193,7 +193,7 @@ const RegisterScreen = () => {
     return (
         <body>
             <div className="bg-img">
-                {messagePassword?
+                {!statusPassword && (password !== "")?
                     <div class="alert alert-warning" style={{width:"30%",left:"70%"}}>
                         <strong>Warning!</strong>
                         <label>Passwords must be at least 8 characters in length</label>
@@ -209,7 +209,7 @@ const RegisterScreen = () => {
                         <div class="pass de">
                             <label for="email" class="form-label">Email:</label>
                             &ensp;&ensp;
-                            <label style={{ color: statusEmail ? "#66ccff" : "red" }}>{(email === "") ? "" : statusEmail ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
+                            <label style={{ color: statusEmail ? "#00FFAB" : "#FF1100" }}>{(email === "") ? "" : statusEmail ? "userNameนี้ใช้ได้" : "userNameนี้ถูกใช้งานแล้ว"}</label>
                         </div>
                         <div class="fields ">
                             <span class="fa fa-user"></span>
@@ -219,7 +219,7 @@ const RegisterScreen = () => {
                             <div class="pass de ">
                                 <label>Password : </label>
                                 &ensp;&ensp;
-                                <label style={{ color: statusPassword ? "#66ccff" : "red" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                                <label style={{ color: statusPassword ? "#00FFAB" : "#FF1100" }} >{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                                 
                             </div>
                             <div class="fields">
@@ -231,7 +231,7 @@ const RegisterScreen = () => {
                             <div class="pass de">
                                 <label>Confirm Password : </label>
                                 &ensp;&ensp;
-                                <label style={{ color: statusPassword ? "#66ccff" : "red" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Match" : "Not match"}</label>
+                                <label style={{ color: (password === repeatPassword) ? "#00FFAB" : "#FF1100" }} >{(repeatPassword === "") ? "" : (password === repeatPassword) ? "Match" : "Not match"}</label>
                             </div>
                             <div class="fields">
                                 <span></span>

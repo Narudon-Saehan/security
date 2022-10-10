@@ -4,6 +4,7 @@ import validator from 'validator'
 import axios from "axios"
 import LoadingScreen from "./LoadingScreen"
 import ErrorScreen from "./ErrorScreen"
+import Swal from 'sweetalert2'
 import './RegisterScreen.css'
 const ForgotPasswordSucceedScreen = () => {
     const params = useParams()
@@ -14,9 +15,10 @@ const ForgotPasswordSucceedScreen = () => {
     const [answer, setAnswer] = useState("")
     const [password, setPassword] = useState("")
     const [repeatPassword, setRepeatPassword] = useState("")
+    const [messagePassword, setMessagePassword] = useState(false)
     const [statusPassword, setStatusPassword] = useState(undefined)
-    const Swal = require('sweetalert2')
-    
+    const [rePasswordSucceed, setRePasswordSucceed] = useState(false)
+
     const checkToken = () => {
         axios.post("http://localhost:5000/forgotPassword/authen", {
             token: params.token
@@ -75,25 +77,52 @@ const ForgotPasswordSucceedScreen = () => {
 
     const ChangePassword = () => {
         setLoading(true)
-        axios.post("http://localhost:5000/forgotPassword/changePassword", {
+        axios.post("http://localhost:5000/forgotPassword/changePassword2", {
             id: dataFormToken.id,
             password: password
         })
             .then((res) => {
-                if (res.data.status === "ok") {
-                    console.log(res.data.result.affectedRows);
-                    if (res.data.result.affectedRows === 1) {
-                        alert("แก้ไขสำเร็จ")
-                        window.location = '/'
+                console.log(res.data);
+                if (res.data.status === "duplicate") {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reset password fail',
+                        text: "You have already used this password, please change it.",
+                    })
+                    setLoading(false)
+                } else if (res.data.status === "ok") {
+                    //console.log(res.data.result.affectedRows);
+                    if (res.data.result.affectedRows >= 1) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Reset password succuss',
+                            text: "Go to login",
+                            confirmButtonText: "OK",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location = '/'
+                            } 
+                        })
+                        setRePasswordSucceed(true)
+                        setLoading(false)
                     } else {
-                        alert("แก้ไขล้มเหลว")
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Reset password Failed',
+                            text: "Contact admin",
+                        })
                         setLoading(false)
                     }
                 } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reset password Failed',
+                        text: res.data.message,
+                    })
                     setLoading(false)
                 }
             }).catch(() => {
-                alert("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/forgotPassword/changePassword โปรดแจ้ง admin");
+                Swal.fire("ไม่สามารถเชื่อมต่อกับ http://localhost:5000/forgotPassword/changePassword โปรดแจ้ง admin");
                 setLoading(false)
             })
     }
@@ -105,33 +134,46 @@ const ForgotPasswordSucceedScreen = () => {
             minUppercase: 1, minNumbers: 1, minSymbols: 1
         })) {
             setStatusPassword(true)
+            setMessagePassword(false)
         } else {
             setStatusPassword(false)
+            setMessagePassword(true)
         }
     }
     const submitChangePassword = (e) => {
         e.preventDefault();
+        setLoading(true)
         if (password && repeatPassword) {
             if (statusPassword) {
                 if (password === repeatPassword) {
                     ChangePassword()
-                    alert("OK")
                 } else {
-                    alert("password และ repeatPassword ไม่ตรงกัน")
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Reset password fail',
+                        text: "Password not match confirm password",
+                    })
+                    setLoading(false)
                 }
             } else {
-                alert("รหัสผ่านของคุณง่ายเกินไป")
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Reset password fail',
+                    text: "Password is not strong",
+                })
+                setLoading(false)
             }
         } else {
-            alert("กรุณากรอกข้อมูลให้ครบ")
+            Swal.fire("Please complete the information.")
+            setLoading(false)
         }
     }
 
     useEffect(() => {
-        return ()=>{
+        return () => {
             checkToken()
         }
-    },[]);
+    }, []);
     if (loading) {
         return <LoadingScreen />
     }
@@ -151,7 +193,7 @@ const ForgotPasswordSucceedScreen = () => {
                         <form onSubmit={checkAnswer}>
                             <div class="field">
                                 <span class="fa fa-user"></span>
-                                <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required/><br /><br />
+                                <input type="text" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Answer" required /><br /><br />
                             </div>
                             <div className="space">
                                 <button type="submit" class="btn btn-primary btn-lg" value="Submit">Submit</button>
@@ -162,31 +204,58 @@ const ForgotPasswordSucceedScreen = () => {
             </body>
         )
     }
+    ///////รีรหัสผ่านเสร็จแล้ว
+    if(rePasswordSucceed){
+        return(
+            <body>
+                <div className="bg-img">
+                    <div className="content">
+                        <header>Reset Password Succeed</header>
+                            <div className="space">
+                                <button type="button" class="btn btn-primary btn-lg" value="Submit" onClick={()=>window.location = "/"}>GO LOGIN</button>
+                            </div>
+                    </div>
+                </div>
+            </body>
+        )
+    }
     ///////รีรหัสผ่านถ้าตอบถูก
     return (
         <body>
+            {!statusPassword && (password !== "") ?
+                <div class="alert alert-danger" style={{ width: "30%", left: "70%" }}>
+                    <strong>Warning!</strong>
+                    <label>Passwords must be at least 8 characters in length</label>
+                    <label>a minimum of 1 lower case letter [a-z]</label>
+                    <label>a minimum of 1 upper case letter [A-Z]</label>
+                    <label>a minimum of 1 numeric character [0-9]</label>
+                    <label>{'a minimum of 1 special character: ~`!@#$%^&*()-_+={}[]|;:"<>,./?'}</label>
+                </div>
+                : <></>}
             <div className="bg-img">
                 <div className="content">
                     <header>Reset Password</header>
                     <form onSubmit={submitChangePassword}>
                         <div class="pass">
                             <label >New Password:</label>
-                            &ensp;&ensp;
-                            <label style={{ color: statusPassword ? "red" : "green" }}>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
+                            &ensp;
+                            <label style={{ color: statusPassword ? "#00FFAB" : "#FF1100" }}>{(password === "") ? "" : statusPassword ? "Is Strong Password" : "Is Not Strong Password"}</label>
                         </div>
                         <div class="field">
                             <span class="fa fa-user"></span>
-                            <input type="password" value={password} onChange={(e) => checkPassword(e.target.value)} />
+                            <input type="password" value={password} onChange={(e) => checkPassword(e.target.value)} required />
                         </div>
                         <div class="pass">
-                            <label>Repeat Password:</label>
-                            <label style={{ color: statusPassword ? "red" : "green" }}>{repeatPassword === "" ? "" : (password === repeatPassword) ? "the same" : "not the same"}</label>
+                            <label>Confirm Password:</label>
+                            &ensp;
+                            <label style={{ color: (password === repeatPassword) ? "#00FFAB" : "#FF1100" }}>{repeatPassword === "" ? "" : (password === repeatPassword) ? "the same" : "not the same"}</label>
                         </div>
                         <div class="field">
-                            <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+                            <span class="fa fa-user"></span>
+                            <input type="password" value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} required />
                         </div>
                         <div class="field space">
-                            <input type="submit" value="Register" />
+                            <input type="submit" value="Reset" />
                         </div>
                     </form>
                 </div>

@@ -170,7 +170,7 @@ const ForgotPasswordSucceedScreen = () => {
         return () => {
             checkToken()
         }
-    });
+    },[]);
     if (loading) {
         return <LoadingScreen />
     }

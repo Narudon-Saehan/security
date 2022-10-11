@@ -61,7 +61,7 @@ const LogScreen = () => {
             }
 
         }
-    })
+    },[])
 
     if (checkLogout) {
         return window.location = "/home"

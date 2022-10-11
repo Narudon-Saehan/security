@@ -247,6 +247,7 @@ app.post("/forgotPassword/changePassword", (req, res) => {
         });
     });
 })
+
 app.post("/forgotPassword/changePassword2", (req, res) => {
     const id = req.body.id
     const plaintextPassword = req.body.password
